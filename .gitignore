@@ -12,6 +12,8 @@
 /build
 
 package-lock.json
+.history
+
 # misc
 .DS_Store
 .env.local
