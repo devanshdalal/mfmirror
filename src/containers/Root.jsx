@@ -1,13 +1,13 @@
 import React from "react";
 import { Route } from "react-router-dom";
 
-import Form from "./home/Form";
+import FundsForm from "./home/FundsForm";
 
 class Root extends React.Component {
   render() {
     return (
       <div>
-        <Route path="/" exact component={Form} />
+        <Route path="/" exact component={FundsForm} />
       </div>
     );
   }
