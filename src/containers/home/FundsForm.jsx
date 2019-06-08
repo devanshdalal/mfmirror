@@ -4,22 +4,19 @@ import { Table, Form, Input } from "reactstrap";
 class FundsForm extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { form: {}, rowsPrinted: 0 };
+    this.rows = [];
   }
-  onChange = e => {
-    this.setState({
-      [e.target.name]: e.target.value
-    });
-  };
 
-  render() {
-    let rows = [];
-
-    for (let i = 0; i < 10; i++) {
-      rows.push(
+  componentDidMount() {
+    this.renderRows(1, 5);
+  }
+  renderRows = (startIndex, endIndex = startIndex + 1) => {
+    for (let i = startIndex; i <= endIndex; i++) {
+      this.rows.push(
         <tr key={i}>
-          <th scope="row">{i + 1}</th>
-          <td>
+          <th scope="row">{i}</th>
+          <td key={`fundName${i}`}>
             <Input
               type="text"
               name={`fundName${i}`}
@@ -29,7 +26,7 @@ class FundsForm extends Component {
               // value={`this.state.fundName${i}`}
             />
           </td>
-          <td>
+          <td key={`Percentage${i}`}>
             <Input
               type="text"
               name={`Percentage${i}`}
@@ -37,9 +34,10 @@ class FundsForm extends Component {
               placeholder="Percentage"
             />
           </td>
-          <td>
+          <td key={`Weight${i}`}>
             <Input
               type="text"
+              key={`Weight${i}`}
               name={`Weight${i}`}
               id="Weight"
               placeholder="Weight"
@@ -47,12 +45,23 @@ class FundsForm extends Component {
           </td>
         </tr>
       );
+      if (i === endIndex) this.setState({ rowsPrinted: endIndex });
     }
+  };
+
+  onChange = e => {
+    this.setState({
+      form: { ...this.state.form, [e.target.name]: e.target.value }
+    });
+  };
+
+  render() {
     return (
       <div>
         <Form
-          onSubmit={data => {
-            console.log("datata", data);
+          onSubmit={e => {
+            e.preventDefault();
+            console.log("datata", e);
           }}
         >
           <Table striped>
@@ -64,7 +73,7 @@ class FundsForm extends Component {
                 <th>Weight</th>
               </tr>
             </thead>
-            <tbody>{rows}</tbody>
+            <tbody>{this.rows}</tbody>
           </Table>
         </Form>
       </div>
