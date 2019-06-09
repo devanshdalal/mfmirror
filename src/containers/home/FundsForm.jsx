@@ -1,5 +1,7 @@
 import React, { Component } from "react";
-import { Table, Form, Input } from "reactstrap";
+import { Table, Button, Form, Input } from "reactstrap";
+
+import SuggestionBox from "../../components/SuggestionBox";
 
 class FundsForm extends Component {
   constructor(props) {
@@ -11,36 +13,42 @@ class FundsForm extends Component {
   componentDidMount() {
     this.renderRows(1, 5);
   }
-  renderRows = (startIndex, endIndex = startIndex + 1) => {
+
+  renderRows = (startIndex, endIndex = startIndex) => {
     for (let i = startIndex; i <= endIndex; i++) {
       this.rows.push(
         <tr key={i}>
           <th scope="row">{i}</th>
           <td key={`fundName${i}`}>
-            <Input
+            <SuggestionBox />
+            {/* <Input
               type="text"
               name={`fundName${i}`}
               id="fundName"
               placeholder="Fund name"
               onChange={this.onChange}
-              // value={`this.state.fundName${i}`}
-            />
+              value={this.state.form[`fundName${i}`]}
+            /> */}
           </td>
-          <td key={`Percentage${i}`}>
+          <td key={`percentage${i}`}>
             <Input
               type="text"
-              name={`Percentage${i}`}
-              id="Percentage"
+              name={`percentage${i}`}
+              id="percentage"
               placeholder="Percentage"
+              onChange={this.onChange}
+              value={this.state.form[`percentage${i}`]}
             />
           </td>
-          <td key={`Weight${i}`}>
+          <td key={`weight${i}`}>
             <Input
               type="text"
-              key={`Weight${i}`}
-              name={`Weight${i}`}
-              id="Weight"
+              key={`weight${i}`}
+              name={`weight${i}`}
+              id="weight"
               placeholder="Weight"
+              onChange={this.onChange}
+              value={this.state.form[`weight${i}`]}
             />
           </td>
         </tr>
@@ -75,6 +83,15 @@ class FundsForm extends Component {
             </thead>
             <tbody>{this.rows}</tbody>
           </Table>
+          <div style={{ justifyContent: "space-between", display: "flex" }}>
+            <Button color="secondary" onClick={() => this.renderRows(this.state.rowsPrinted + 1)}>
+              Add row
+            </Button>
+
+            <Button color="success" onClick={() => console.log("form data", this.state.form)}>
+              Submit
+            </Button>
+          </div>
         </Form>
       </div>
     );
