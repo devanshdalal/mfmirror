@@ -15,7 +15,7 @@ class SuggestionBox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      list: stockData,
+      list: [...stockData],
       courser: 0,
       searchString: this.props.search ? this.props.search : "",
       showList: false
@@ -61,26 +61,26 @@ class SuggestionBox extends React.Component {
       this.setState({
         courser: countDown
       });
-    } else {
-      this.setState({
-        courser: 0
-      });
     }
   };
 
   searching = event => {
-    const searchedData = [];
+    let searchedData = [];
+    console.log("searching", event.target.value);
+
+    const text = event.target.value.trim().toLowerCase();
+    if (text && text.length) {
+      stockData.map((item, index) => {
+        if (item.toLowerCase().indexOf(text) !== -1) {
+          searchedData.push(item);
+        }
+      });
+    } else {
+      searchedData = [...stockData];
+    }
     this.setState({
+      list: searchedData,
       searchString: event.target.value
-    });
-    stockData.map((item, index) => {
-      const text = event.target.value.trim().toLowerCase();
-      if (item.toLowerCase().indexOf(text) !== -1) {
-        searchedData.push(item);
-      }
-    });
-    this.setState({
-      list: searchedData
     });
   };
 
@@ -91,9 +91,11 @@ class SuggestionBox extends React.Component {
   };
 
   onBlur = () => {
-    const { onBlur } = this.props;
-    this.setState({ showList: false });
-    onBlur && onBlur();
+    setTimeout(() => {
+      const { onBlur } = this.props;
+      this.setState({ showList: false });
+      onBlur && onBlur();
+    }, 100);
   };
 
   render() {
