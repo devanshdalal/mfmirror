@@ -11,14 +11,16 @@
 
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 .table th {
@@ -36,20 +38,19 @@ code {
   position: absolute !important;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  background-color: aliceblue;
-}
-
-.SuggestionBox {
-  width: 100%;
+  background-color: white;
+  -webkit-box-shadow: 3px 6px 14px 1px rgba(0, 0, 0, 0.72);
+  -moz-box-shadow: 3px 6px 14px 1px rgba(0, 0, 0, 0.72);
+  box-shadow: 3px 6px 14px 1px rgba(0, 0, 0, 0.72);
 }
 
 .list-item {
-  padding: 5px;
-  height: 42px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  padding: 8px;
+  height: 60px;
+  /* overflow: hidden; */
+  /* text-overflow: ellipsis; */
+  /* white-space: nowrap; */
 }
 .activeItem {
-  background-color: blue;
+  background-color: rgba(0, 0, 0, 0.05);
 }

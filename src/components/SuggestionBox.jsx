@@ -1,5 +1,5 @@
 import React from "react";
-import { Collapse, FormGroup, Input } from "reactstrap";
+import { Input } from "reactstrap";
 import { ArrowKeyStepper, AutoSizer, List } from "react-virtualized";
 import classNames from "classnames";
 
@@ -47,10 +47,19 @@ class SuggestionBox extends React.Component {
     const { courser, list } = this.state;
     // arrow up/down button should select next/previous list element
     if (e.keyCode === 13) {
-      this.setState({
-        searchString: list[courser],
-        showList: false
-      });
+      e.preventDefault();
+      this.setState(
+        {
+          searchString: list[courser],
+          showList: false
+        },
+        () => {
+          console.log("this.text", this.text);
+
+          this.text.selectionStart = this.state.searchString.start;
+          this.text.selectionEnd = this.state.searchString.end;
+        }
+      );
     } else if (e.keyCode === 38 && courser > 0) {
       const countUp = Math.floor(this.state.courser - 1);
       this.setState({
@@ -61,19 +70,20 @@ class SuggestionBox extends React.Component {
       this.setState({
         courser: countDown
       });
+    } else {
+      this.setState({ showList: true });
     }
   };
 
   searching = event => {
     let searchedData = [];
-    console.log("searching", event.target.value);
-
     const text = event.target.value.trim().toLowerCase();
     if (text && text.length) {
       stockData.map((item, index) => {
         if (item.toLowerCase().indexOf(text) !== -1) {
           searchedData.push(item);
         }
+        return void 0;
       });
     } else {
       searchedData = [...stockData];
@@ -99,9 +109,6 @@ class SuggestionBox extends React.Component {
   };
 
   render() {
-    const classActive = classNames({
-      activeItem: this.state.courser === -1
-    });
     return (
       <div className="SuggestionBox">
         <Input
@@ -114,12 +121,16 @@ class SuggestionBox extends React.Component {
           onBlur={this.onBlur}
           autoComplete="off"
           onKeyDown={this.handleKeyDown}
+          ref={input => (this.text = input)}
         />
         {this.state.showList && (
           <ul className="search-list marginPadding">
             <AutoSizer disableHeight>
               {({ width }) => (
-                <ArrowKeyStepper columnCount={1} rowCount={this.state.list.length}>
+                <ArrowKeyStepper
+                  columnCount={1}
+                  rowCount={this.state.list.length}
+                >
                   {({ onSectionRendered, scrollToColumn, scrollToRow }) => (
                     <List
                       width={width}
