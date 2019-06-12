@@ -46,10 +46,10 @@ code {
 
 .list-item {
   padding: 8px;
-  height: 60px;
-  /* overflow: hidden; */
-  /* text-overflow: ellipsis; */
+  overflow: hidden;
+  text-overflow: ellipsis;
   /* white-space: nowrap; */
+  /* word-break: break-all; */
 }
 .activeItem {
   background-color: rgba(0, 0, 0, 0.05);

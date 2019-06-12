@@ -20,6 +20,7 @@ class SuggestionBox extends React.Component {
       searchString: this.props.search ? this.props.search : "",
       showList: false
     };
+    this.text = React.createRef();
   }
 
   rowRenderer = ({ key, index, isScrolling, isVisible, style }) => {
@@ -38,7 +39,7 @@ class SuggestionBox extends React.Component {
           });
         }}
       >
-        <div>{this.state.list[index]}</div>
+        {this.state.list[index]}
       </li>
     );
   };
@@ -47,28 +48,23 @@ class SuggestionBox extends React.Component {
     const { courser, list } = this.state;
     // arrow up/down button should select next/previous list element
     if (e.keyCode === 13) {
-      e.preventDefault();
-      this.setState(
-        {
-          searchString: list[courser],
-          showList: false
-        },
-        () => {
-          console.log("this.text", this.text);
-
-          this.text.selectionStart = this.state.searchString.start;
-          this.text.selectionEnd = this.state.searchString.end;
-        }
-      );
+      this.setState({
+        searchString: list[courser],
+        showList: false
+      });
     } else if (e.keyCode === 38 && courser > 0) {
       const countUp = Math.floor(this.state.courser - 1);
       this.setState({
-        courser: countUp
+        courser: countUp,
+        searchString: list[countUp],
+        showList: true
       });
     } else if (e.keyCode === 40 && courser < list.length - 1) {
       const countDown = Math.floor(this.state.courser + 1);
       this.setState({
-        courser: countDown
+        courser: countDown,
+        searchString: list[countDown],
+        showList: true
       });
     } else {
       this.setState({ showList: true });
@@ -121,7 +117,7 @@ class SuggestionBox extends React.Component {
           onBlur={this.onBlur}
           autoComplete="off"
           onKeyDown={this.handleKeyDown}
-          ref={input => (this.text = input)}
+          innerRef={this.text}
         />
         {this.state.showList && (
           <ul className="search-list marginPadding">
