@@ -20,7 +20,6 @@ class SuggestionBox extends React.Component {
       searchString: this.props.search ? this.props.search : "",
       showList: false
     };
-    this.text = React.createRef();
   }
 
   rowRenderer = ({ key, index, isScrolling, isVisible, style }) => {
@@ -28,15 +27,24 @@ class SuggestionBox extends React.Component {
       activeItem: this.state.courser === index
     });
 
+    const {
+      setValue,
+      inputProps: { name }
+    } = this.props;
     return (
       <li
         key={key}
         style={style}
         className={`list-item ${classActive}`}
-        onClick={() => {
+        onMouseDown={e => {
+          e.stopPropagation();
+          e.preventDefault();
           this.setState({
-            searchString: this.state.list[index]
+            searchString: this.state.list[index],
+            showList: false
           });
+          setValue &&
+            setValue({ target: { name, value: this.state.list[index] } });
         }}
       >
         {this.state.list[index]}
@@ -44,27 +52,38 @@ class SuggestionBox extends React.Component {
     );
   };
 
-  handleKeyDown = e => {
+  handleKeyDown = event => {
     const { courser, list } = this.state;
+    const {
+      setValue,
+      inputProps: { name }
+    } = this.props;
     // arrow up/down button should select next/previous list element
-    if (e.keyCode === 13) {
+    if (event.keyCode === 13) {
       this.setState({
         searchString: list[courser],
         showList: false
       });
-    } else if (e.keyCode === 38 && courser > 0) {
+      setValue && setValue({ target: { name, value: list[courser] } });
+    } else if (event.keyCode === 38 && courser > 0) {
       const countUp = Math.floor(this.state.courser - 1);
       this.setState({
         courser: countUp,
         searchString: list[countUp],
         showList: true
       });
-    } else if (e.keyCode === 40 && courser < list.length - 1) {
+      setValue && setValue({ target: { name, value: list[courser] } });
+    } else if (event.keyCode === 40 && courser < list.length - 1) {
       const countDown = Math.floor(this.state.courser + 1);
       this.setState({
         courser: countDown,
         searchString: list[countDown],
         showList: true
+      });
+      setValue && setValue({ target: { name, value: list[courser] } });
+    } else if (event.keyCode === 27) {
+      this.setState({
+        showList: false
       });
     } else {
       this.setState({ showList: true });
@@ -72,6 +91,7 @@ class SuggestionBox extends React.Component {
   };
 
   searching = event => {
+    const { setValue } = this.props;
     let searchedData = [];
     const text = event.target.value.trim().toLowerCase();
     if (text && text.length) {
@@ -88,36 +108,32 @@ class SuggestionBox extends React.Component {
       list: searchedData,
       searchString: event.target.value
     });
+    setValue && setValue(event);
   };
 
-  onFocus = () => {
-    const { onFocus } = this.props;
+  onFocus = event => {
+    const { onFocus } = this.props.inputProps;
     this.setState({ showList: true });
-    onFocus && onFocus();
+    onFocus && onFocus(event);
   };
 
-  onBlur = () => {
-    setTimeout(() => {
-      const { onBlur } = this.props;
-      this.setState({ showList: false });
-      onBlur && onBlur();
-    }, 100);
+  onBlur = event => {
+    const { onBlur } = this.props.inputProps;
+    this.setState({ showList: false });
+    onBlur && onBlur(event);
   };
 
   render() {
+    const { inputProps } = this.props;
     return (
       <div className="SuggestionBox">
         <Input
-          type="text"
-          name="searchText"
-          placeholder="Search for a portal..."
-          value={this.state.searchString}
+          {...inputProps}
           onChange={this.searching}
           onFocus={this.onFocus}
           onBlur={this.onBlur}
-          autoComplete="off"
+          value={this.state.searchString}
           onKeyDown={this.handleKeyDown}
-          innerRef={this.text}
         />
         {this.state.showList && (
           <ul className="search-list marginPadding">

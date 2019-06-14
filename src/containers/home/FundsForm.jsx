@@ -20,15 +20,16 @@ class FundsForm extends Component {
         <tr key={i}>
           <th scope="row">{i}</th>
           <td key={`fundName${i}`}>
-            <SuggestionBox />
-            {/* <Input
-              type="text"
-              name={`fundName${i}`}
-              id="fundName"
-              placeholder="Fund name"
-              onChange={this.onChange}
-              value={this.state.form[`fundName${i}`]}
-            /> */}
+            <SuggestionBox
+              inputProps={{
+                type: "text",
+                name: `fundName${i}`,
+                id: "fundName",
+                placeholder: "Fund name",
+                autoComplete: "off"
+              }}
+              setValue={this.onChange}
+            />
           </td>
           <td key={`percentage${i}`}>
             <Input
@@ -57,9 +58,9 @@ class FundsForm extends Component {
     }
   };
 
-  onChange = e => {
+  onChange = event => {
     this.setState({
-      form: { ...this.state.form, [e.target.name]: e.target.value }
+      form: { ...this.state.form, [event.target.name]: event.target.value }
     });
   };
 
@@ -84,11 +85,17 @@ class FundsForm extends Component {
             <tbody>{this.rows}</tbody>
           </Table>
           <div style={{ justifyContent: "space-between", display: "flex" }}>
-            <Button color="secondary" onClick={() => this.renderRows(this.state.rowsPrinted + 1)}>
+            <Button
+              color="secondary"
+              onClick={() => this.renderRows(this.state.rowsPrinted + 1)}
+            >
               Add row
             </Button>
 
-            <Button color="success" onClick={() => console.log("form data", this.state.form)}>
+            <Button
+              color="success"
+              onClick={() => console.log("form data", this.state.form)}
+            >
               Submit
             </Button>
           </div>
