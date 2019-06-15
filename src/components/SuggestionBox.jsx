@@ -125,6 +125,7 @@ class SuggestionBox extends React.Component {
 
   render() {
     const { inputProps } = this.props;
+    const { list } = this.state;
     return (
       <div className="SuggestionBox">
         <Input
@@ -139,14 +140,11 @@ class SuggestionBox extends React.Component {
           <ul className="search-list marginPadding">
             <AutoSizer disableHeight>
               {({ width }) => (
-                <ArrowKeyStepper
-                  columnCount={1}
-                  rowCount={this.state.list.length}
-                >
+                <ArrowKeyStepper columnCount={1} rowCount={list.length}>
                   {({ onSectionRendered, scrollToColumn, scrollToRow }) => (
                     <List
                       width={width}
-                      height={181}
+                      height={list.length > 3 ? 4 * 56 : list.length * 56}
                       className="virtualized-list marginPadding"
                       rowCount={this.state.list.length}
                       rowHeight={56}
