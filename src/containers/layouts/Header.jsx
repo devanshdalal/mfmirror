@@ -1,15 +1,13 @@
 import React from "react";
 
-import { Navbar, NavItem } from "reactstrap";
+import { Navbar } from "reactstrap";
 
 class Header extends React.Component {
   render() {
     return (
       <div className="Header">
-        <Navbar brand="logo" right>
-          <NavItem>Home</NavItem>
-          <NavItem>Sign In</NavItem>
-          <NavItem>Register</NavItem>
+        <Navbar color="faded" light expand="md" brand="logo">
+          Home
         </Navbar>
       </div>
     );

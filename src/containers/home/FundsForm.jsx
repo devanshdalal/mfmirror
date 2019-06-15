@@ -73,7 +73,7 @@ class FundsForm extends Component {
             console.log("datata", e);
           }}
         >
-          <Table striped>
+          <Table borderless>
             <thead>
               <tr>
                 <th>#</th>
