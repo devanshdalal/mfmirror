@@ -1,0 +1,565 @@
+$white: #fff;
+$black: #000;
+$black-125: rgba(0, 0, 0, 0.125);
+$black-20: rgba(0, 0, 0, 0.2);
+$black-25: rgba(0, 0, 0, 0.25);
+$black-33: rgba(0, 0, 0, 0.33);
+$black-50: rgba(0, 0, 0, 0.5);
+$black-75: rbga(0, 0, 0, 0.75);
+$dark-grey: #707070;
+$dark-grey-text: #555;
+$dark-grey-75: rgba(100, 100, 100, 0.75);
+$dark-grey-50: rgba(100, 100, 100, 0.5);
+$warm-grey: #8d8d8d;
+$grey: #979797;
+$zero-grey: #a4a4a4;
+$light-grey: #f0f0f0;
+$very-light-grey: #fbfbfb;
+$brand-blue: #008fff;
+$brand-grey: #b7b7b7;
+$border-color: #e5e5e5;
+$page-background-grey: #e5e5e5;
+$table-striped-grey: #f9f9f9;
+$table-border: #dddddd;
+$table-row-hover: #f5f5f5;
+$dropdown-highlight: #eee;
+$active-item-color: #5a88ff;
+$orange: #f05436;
+$link: #4990e2;
+$notification: #db4342;
+$success-color: #3c763d;
+$error-color: #a94442;
+$warning-color: #8a6d3b;
+$warning-background: #fcf8e3;
+$info-color: #31708f;
+$focus-color: #66afe9;
+$focus-glow-color: rgba(102, 175, 233, 0.6);
+$get-started-color: #67c668;
+$facebook: #3b5998;
+$twitter: #4099ff;
+$linkedin: #0077b5;
+$sign-in-color: #5988fe;
+
+$organiser: #588dc9;
+$admin: #254974;
+$portal-owner: #0d2643;
+$support: #828282;
+$member: #5cb85c;
+$subscriber: #5bc0de;
+$invited: #f0ad4e;
+
+$stage-preparation: #ffc40e;
+$stage-open: #58c259;
+$stage-closed: #f05436;
+$stage-concluded: #488dff;
+
+$log-item-green: #5ab75a;
+$log-item-amber: #ffbb5b;
+$log-item-red: #d9534f;
+
+$engagement-invited: #f5a623;
+$engagement-subscriber: #58c259;
+$engagement-contributor: #3a853b;
+$engagement-rejected: #d0021b;
+
+$moderation-pending: #f5a623;
+$moderation-approved: #58c259;
+$moderation-denied: #d9534f;
+
+$unread-indicator: #4a90e2;
+
+$border: 1px solid $border-color;
+
+@mixin avatar-icon($dimension) {
+  display: inline-block;
+  width: $dimension;
+  height: $dimension;
+  overflow: hidden;
+  vertical-align: middle;
+  position: relative;
+
+  img {
+    width: $dimension;
+    height: $dimension;
+    border-radius: $dimension / 2;
+  }
+}
+
+@mixin lighten-bb($color, $percent) {
+  background-color: lighten($color, $percent);
+  border: 1px solid lighten($color, $percent + 5%);
+}
+
+@mixin vertical-center {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+@mixin box-shadow {
+  box-shadow: 0 2px 4px 0 $black-50;
+}
+
+.h1,
+.h2,
+.h3,
+.h4,
+.h5,
+.h6,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+a {
+  color: $link;
+}
+
+// Button customisations
+.btn-inverse {
+  background-color: $black;
+  color: $white;
+
+  &:focus {
+    color: $white;
+  }
+
+  &:hover,
+  &:active:focus {
+    color: $white;
+    $background-color: lighten($black, 5%);
+  }
+}
+
+.btn-organise {
+  background-color: $organiser;
+  color: $white;
+
+  &:focus {
+    background-color: $organiser;
+    color: $white;
+  }
+
+  &:hover,
+  &:active:focus {
+    background-color: darken($organiser, 5%);
+    color: $white;
+  }
+}
+
+.btn-transparent {
+  background: none;
+  color: $white;
+  border: 1px solid $white;
+
+  &:hover,
+  &:focus {
+    background: $black-33;
+    color: $white;
+  }
+
+  &.disabled,
+  &:disabled {
+    background: none;
+    border: 1px solid $white;
+  }
+
+  &:active {
+    outline: 0;
+    box-shadow: inset 0 3px 5px $black-125;
+  }
+}
+
+.btn-translucent {
+  background: $black-50;
+  color: $white;
+  border: 1px solid $white;
+
+  &:hover,
+  &:focus {
+    background: $black-33;
+    color: $white;
+  }
+
+  &.disabled,
+  &:disabled {
+    background: none;
+    border: 1px solid $white;
+  }
+
+  &:active {
+    outline: 0;
+    box-shadow: inset 0 3px 5px $black-125;
+  }
+}
+
+.btn-link {
+  color: $link;
+}
+
+.btn-xlg {
+  font-size: 24px;
+  line-height: 1.2;
+  padding: 10px 16px;
+  min-width: 240px;
+}
+
+@mixin btn-custom($background, $foreground) {
+  background: $background;
+  color: $foreground;
+
+  &:hover,
+  &:focus,
+  &:active:focus {
+    background-color: darken($background, 5%);
+    color: $foreground;
+  }
+}
+
+.btn-facebook {
+  @include btn-custom($facebook, $white);
+}
+
+.btn-twitter {
+  @include btn-custom($twitter, $white);
+}
+
+.btn-linkedin {
+  @include btn-custom($linkedin, $white);
+}
+
+.btn-grey {
+  @include btn-custom($dark-grey-text, $white);
+}
+
+.btn-light-grey {
+  @include btn-custom($warm-grey, $white);
+}
+
+.btn-sign-in {
+  border: 1px solid $sign-in-color;
+  @include btn-custom($white, $sign-in-color);
+}
+// End button customisations
+
+// override react virtualized styles
+.ReactVirtualized__Table__headerRow {
+  text-transform: none;
+}
+
+.ReactVirtualized__Table__row {
+  border-top: 1px solid $table-border;
+
+  &:nth-child(odd) {
+    background-color: $table-striped-grey;
+  }
+
+  &:hover {
+    background-color: $table-row-hover;
+  }
+}
+
+.ReactVirtualized__Table__sortableHeaderColumn {
+  color: $link;
+}
+// end override react virtualized styles
+
+.tab-pane {
+  padding: 15px 10px;
+}
+
+.small-text {
+  font-size: 12px;
+  font-style: italic;
+  line-height: 1.5;
+}
+
+.light-text {
+  font-weight: normal;
+}
+
+.help-block-above {
+  margin-top: 0;
+}
+
+.indent-20 {
+  margin-left: 20px;
+}
+
+.dropzone-text {
+  margin: 70px 10px;
+  text-align: center;
+  color: $warm-grey;
+}
+
+// overriding bootstrap dropdown styles
+.dropdown-menu {
+  > .active > a,
+  > li > a:hover,
+  > li > a:focus,
+  > .active > a:hover,
+  > .active > a:focus {
+    background-color: $dropdown-highlight;
+    background-image: none;
+    filter: none;
+    color: inherit;
+  }
+}
+
+.permissions-checkbox,
+.room-visibility-descriptor {
+  margin-left: 10px;
+}
+
+.permissions-checkbox input[type="checkbox"] {
+  margin-top: 9px;
+}
+
+.UserInviteModal .permissions-checkbox input[type="checkbox"] {
+  margin-top: 4px;
+}
+
+.PermissionsSelector .help-block {
+  margin-left: 20px;
+}
+
+.PermissionsSelector .panel-heading {
+  padding: 15px;
+}
+
+.PermissionsSelector input[type="checkbox"] {
+  margin-right: 10px;
+  vertical-align: text-bottom;
+}
+
+// really precise selector for badge in panel heading to override bootstrap
+.panel-default > .panel-heading .badge.Badge--role-organiser {
+  background-color: $organiser;
+}
+
+.panel-default > .panel-heading .badge.Badge--role-admin {
+  background-color: $admin;
+}
+
+.PermissionsSelector__panel-title {
+  overflow: auto;
+  vertical-align: middle;
+  font-size: 20px;
+
+  .Badge--role-admin,
+  .Badge--role-organiser {
+    font-size: 20px;
+    border-radius: 15px;
+    padding: 5px 10px;
+  }
+}
+
+.PermissionsSelector__list {
+  margin-left: 10px;
+}
+
+.PermissionsSelector__divider {
+  margin-top: 7px;
+  margin-bottom: 10px;
+}
+
+.help-text {
+  font-size: 14px;
+  line-height: 20px;
+  color: $grey;
+}
+
+.error-text {
+  // bootstrap style needed to break out of the reactstrap components
+  display: inline-block;
+  max-width: 100%;
+  margin-bottom: 5px;
+  font-weight: 700;
+  color: $error-color;
+}
+
+// overriding the bootstrap defaults for search-filter component
+.filter-button .badge {
+  font-size: 10px;
+}
+
+.search-filter {
+  position: relative;
+
+  .panel-body {
+    padding-top: 5px;
+  }
+
+  .input-group-addon {
+    border-radius: 0;
+  }
+
+  .form-group {
+    margin-bottom: 0;
+  }
+
+  input {
+    border-radius: 0;
+  }
+
+  .search-box {
+    z-index: 0;
+  }
+
+  .panel {
+    margin-bottom: 0;
+    border-radius: 0;
+    border-top: 0;
+    position: absolute;
+    width: 100%;
+    box-shadow: none;
+    z-index: 1;
+
+    &.panel-collapsed {
+      border-bottom: 0;
+    }
+  }
+}
+
+.filter-row {
+  margin-top: 5px;
+  margin-bottom: 5px;
+
+  .btn {
+    margin-bottom: 5px;
+
+    // &:focus {
+    //   background-color: $white;
+    // }
+
+    // &.active {
+    //   background-color: $border-color;
+    // }
+  }
+}
+
+.search-box .input-group-addon.active {
+  color: $active-item-color;
+}
+
+.search-box .addon-display-count {
+  padding: 6px;
+}
+
+
+
+html {
+  height: 100%;
+}
+
+::-webkit-scrollbar {
+  -webkit-appearance: none;
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  border-radius: 4px;
+  background-color: #e2e2e2;
+  box-shadow: 0 0 1px rgba(255, 255, 255, 0.5);
+}
+
+body {
+  background-image: linear-gradient(-140deg, #2c7dbc 15%, #7cccc5 70%);
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.main-app {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.Header {
+  background-color: #2c7dbc;
+  margin-bottom: 20px;
+}
+.Footer {
+  background-color: #2c7dbc;
+  margin-top: 20px;
+}
+
+.container {
+  width: 100%;
+  position: relative;
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.75);
+  border-radius: 4px;
+  display: table-cell;
+  vertical-align: middle;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+.marginPadding {
+  margin: 0;
+  padding: 0;
+}
+.search-list {
+  position: relative;
+  width: 100%;
+}
+.virtualized-list {
+  position: absolute !important;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  background-color: white;
+  -webkit-box-shadow: 3px 6px 14px 1px rgba(0, 0, 0, 0.72);
+  -moz-box-shadow: 3px 6px 14px 1px rgba(0, 0, 0, 0.72);
+  box-shadow: 3px 6px 14px 1px rgba(0, 0, 0, 0.72);
+}
+
+.list-item {
+  padding: 8px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  /* white-space: nowrap; */
+  /* word-break: break-all; */
+}
+.activeItem {
+  background-color: rgba(0, 0, 0, 0.05);
+}
+.FundsForm {
+  width: 60%;
+  margin-left: 32px;
+  &__table {
+    margin-bottom: 0;
+    & th {
+      vertical-align: middle;
+    }
+  }
+  &__formControl {
+    margin: 0px 12px 12px;
+  }
+  &__addRow {
+    display: flex;
+    align-items: flex-start;
+  }
+  &__submit {
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+
+@media (min-width: 576px) {
+  .FundsForm {
+    width: 100%;
+  }
+}

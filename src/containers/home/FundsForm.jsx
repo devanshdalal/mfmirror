@@ -31,7 +31,7 @@ class FundsForm extends Component {
               setValue={this.onChange}
             />
           </td>
-          <td key={`percentage${i}`}>
+          {/* <td key={`percentage${i}`}>
             <Input
               type="text"
               name={`percentage${i}`}
@@ -40,10 +40,10 @@ class FundsForm extends Component {
               onChange={this.onChange}
               value={this.state.form[`percentage${i}`]}
             />
-          </td>
+          </td> */}
           <td key={`weight${i}`}>
             <Input
-              type="text"
+              type="number"
               key={`weight${i}`}
               name={`weight${i}`}
               id="weight"
@@ -66,38 +66,42 @@ class FundsForm extends Component {
 
   render() {
     return (
-      <div className="container">
+      <div className="container FundsForm">
         <Form
           onSubmit={e => {
             e.preventDefault();
             console.log("datata", e);
           }}
         >
-          <Table borderless>
+          <Table borderless className="FundsForm__table">
             <thead>
               <tr>
                 <th>#</th>
                 <th>Fund</th>
-                <th>Percentage</th>
+                {/* <th>Percentage</th> */}
                 <th>Weight</th>
               </tr>
             </thead>
             <tbody>{this.rows}</tbody>
           </Table>
-          <div style={{ justifyContent: "space-between", display: "flex" }}>
-            <Button
-              color="secondary"
-              onClick={() => this.renderRows(this.state.rowsPrinted + 1)}
-            >
-              Add row
-            </Button>
+          <div className="FundsForm__formControl">
+            <div className="FundsForm__addRow">
+              <Button
+                color="secondary"
+                onClick={() => this.renderRows(this.state.rowsPrinted + 1)}
+              >
+                Add row
+              </Button>
+            </div>
 
-            <Button
-              color="success"
-              onClick={() => console.log("form data", this.state.form)}
-            >
-              Submit
-            </Button>
+            <div className="FundsForm__submit">
+              <Button
+                color="success"
+                onClick={() => console.log("form data", this.state.form)}
+              >
+                Submit →
+              </Button>
+            </div>
           </div>
         </Form>
       </div>
