@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Table, Button, Form, Input } from "reactstrap";
+import { isLoggedIn } from "../../util/method";
 
 import SuggestionBox from "../../components/SuggestionBox";
 
@@ -11,6 +12,9 @@ class FundsForm extends Component {
   }
 
   componentDidMount() {
+    // isLoggedIn().then(result => {
+    //   console.log("reeeeeee", result);
+    // });
     this.renderRows(1, 5);
   }
 
