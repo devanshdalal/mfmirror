@@ -68,10 +68,70 @@ class FundsForm extends Component {
     });
   };
 
+  handleSubmitBtn = () => {
+    // console.log("form data", this.state.form, this.props.history);
+    // api call
+
+    const portfolios = [
+      {
+        stock: "Chambal Fertilizers & Chemicals Ltd. ",
+        sector: "Fertilisers-composite",
+        value: 2594.2,
+        totalHoldings: 3.09,
+        quantity: 1.37
+      },
+      {
+        stock: "Sonata Software Ltd. ",
+        sector: "Computers - software",
+        value: 2583.2,
+        totalHoldings: 3.08,
+        quantity: 72.3
+      },
+      {
+        stock: "NIIT Techonologies Ltd. ",
+        sector: "Computers - software",
+        value: 2524.2,
+        totalHoldings: 3.0,
+        quantity: 19.2
+      },
+      {
+        stock: "Bank Of Baroda ",
+        sector: "Banks",
+        value: 2345.2,
+        totalHoldings: 2.78,
+        quantity: 72.3
+      },
+      {
+        stock: "Kalpataru Power Transmission Ltd. ",
+        sector: "Flim production, distribution & exhibition",
+        value: 21345.2,
+        totalHoldings: 0.03,
+        quantity: 35.3
+      }
+    ];
+
+    const tableData = [
+      ...portfolios,
+      ...portfolios,
+      ...portfolios,
+      ...portfolios,
+      ...portfolios,
+      ...portfolios,
+      ...portfolios,
+      ...portfolios,
+      ...portfolios,
+      ...portfolios,
+      ...portfolios,
+      ...portfolios
+    ];
+
+    this.props.history.push("/portfolio-overview", tableData);
+  };
+
   render() {
     return (
       <div className="FundsForm">
-        <div className="container">
+        <div className="app-container">
           <Form
             onSubmit={e => {
               e.preventDefault();
@@ -97,7 +157,11 @@ class FundsForm extends Component {
               </div>
 
               <div className="FundsForm__submit">
-                <Button color="success" onClick={() => console.log("form data", this.state.form)}>
+                <Button
+                  color="success"
+                  // type="submit"
+                  onClick={this.handleSubmitBtn}
+                >
                   Submit →
                 </Button>
               </div>

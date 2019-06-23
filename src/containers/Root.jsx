@@ -1,14 +1,19 @@
 import React from "react";
-import { Route } from "react-router-dom";
+import { Route, Redirect, Switch } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
 import FundsForm from "./home/FundsForm";
+import PortfolioOverview from "./PortfolioOverview";
 
 class Root extends React.Component {
   render() {
     return (
       <Layout>
-        <Route path="/" exact component={FundsForm} />
+        <Switch>
+          <Route path="/" exact component={FundsForm} />
+          <Route path="/portfolio-overview" component={PortfolioOverview} />
+          <Redirect to="/" />
+        </Switch>
       </Layout>
     );
   }

@@ -422,7 +422,7 @@ body {
   padding: 5px;
 }
 
-.container {
+.app-container {
   width: 100%;
   position: relative;
   z-index: 10;
@@ -430,6 +430,10 @@ body {
   border-radius: 4px;
   display: table-cell;
   vertical-align: middle;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-right: auto;
+  margin-left: auto;
 }
 
 code {
@@ -485,5 +489,19 @@ code {
   &__submit {
     display: flex;
     justify-content: flex-end;
+  }
+}
+
+.PortfolioOverview {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  .app-container {
+    width: 100%;
+    height: 100%;
+    display: flex;
+  }
+  .WindowScroller {
+    width: 100%;
   }
 }
