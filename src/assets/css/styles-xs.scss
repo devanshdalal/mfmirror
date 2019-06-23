@@ -1,21 +1,19 @@
-@import "styles";
+@import "colors";
 
 // mobile view - corresponds to bootstrap xs devices
 @media (max-width: 767px) {
   .FundsForm {
-    width: 100%;
+    margin: 0px;
   }
 }
 
 @media (max-width: 639px) {
 }
 
+// small mobile
 @media (max-width: 340px) {
 }
 
 // ipad targeting
 @media (min-width: 768px) and (max-width: 991px) {
-  .FundsForm {
-    width: 100%;
-  }
 }

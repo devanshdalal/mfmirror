@@ -70,44 +70,40 @@ class FundsForm extends Component {
 
   render() {
     return (
-      <div className="container FundsForm">
-        <Form
-          onSubmit={e => {
-            e.preventDefault();
-            console.log("datata", e);
-          }}
-        >
-          <Table borderless className="FundsForm__table">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Fund</th>
-                {/* <th>Percentage</th> */}
-                <th>Weight</th>
-              </tr>
-            </thead>
-            <tbody>{this.rows}</tbody>
-          </Table>
-          <div className="FundsForm__formControl">
-            <div className="FundsForm__addRow">
-              <Button
-                color="secondary"
-                onClick={() => this.renderRows(this.state.rowsPrinted + 1)}
-              >
-                Add row
-              </Button>
-            </div>
+      <div className="FundsForm">
+        <div className="container">
+          <Form
+            onSubmit={e => {
+              e.preventDefault();
+              console.log("datata", e);
+            }}
+          >
+            <Table borderless className="FundsForm__table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Fund</th>
+                  {/* <th>Percentage</th> */}
+                  <th>Weight</th>
+                </tr>
+              </thead>
+              <tbody>{this.rows}</tbody>
+            </Table>
+            <div className="FundsForm__formControl">
+              <div className="FundsForm__addRow">
+                <Button color="secondary" onClick={() => this.renderRows(this.state.rowsPrinted + 1)}>
+                  Add row
+                </Button>
+              </div>
 
-            <div className="FundsForm__submit">
-              <Button
-                color="success"
-                onClick={() => console.log("form data", this.state.form)}
-              >
-                Submit →
-              </Button>
+              <div className="FundsForm__submit">
+                <Button color="success" onClick={() => console.log("form data", this.state.form)}>
+                  Submit →
+                </Button>
+              </div>
             </div>
-          </div>
-        </Form>
+          </Form>
+        </div>
       </div>
     );
   }
