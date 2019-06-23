@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-virtualized/styles.css";
-import "assets/css/styles.scss";
-import "assets/css/styles-xs.scss";
+import "./assets/css/styles.scss";
+import "./assets/css/styles-xs.scss";
 import App from "./containers/Root";
 import { BrowserRouter } from "react-router-dom";
 
