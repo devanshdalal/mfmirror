@@ -2,17 +2,22 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-virtualized/styles.css";
+import { BrowserRouter } from "react-router-dom";
+import { Provider } from "react-redux";
+
+import store from "./redux/store";
 import "./assets/css/styles.scss";
 import "./assets/css/styles-xs.scss";
 import App from "./containers/Root";
-import { BrowserRouter } from "react-router-dom";
 
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
-  <BrowserRouter>
-    <App />
-  </BrowserRouter>,
+  <Provider store={store}>
+    <BrowserRouter>
+      <App />
+    </BrowserRouter>
+  </Provider>,
   document.getElementById("root")
 );
 

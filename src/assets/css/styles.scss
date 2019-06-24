@@ -505,3 +505,44 @@ code {
     width: 100%;
   }
 }
+
+.loading {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000000;
+}
+
+// override react virtualized styles
+.ReactVirtualized__Table__headerRow {
+  text-transform: none;
+}
+
+.ReactVirtualized__Table__row {
+  border-top: 1px solid $table-border;
+
+  &:nth-child(odd) {
+    background-color: $table-striped-grey;
+  }
+
+  &:hover {
+    background-color: $table-row-hover;
+  }
+}
+.ReactVirtualized__Table__sortableHeaderIcon {
+  font-size: 28px;
+  height: 24px;
+  margin-bottom: -2.5px;
+}
+.ReactVirtualized__Table__headerColumn {
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+// end override react virtualized styles

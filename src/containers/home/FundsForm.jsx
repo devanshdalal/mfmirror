@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import { Table, Button, Form, Input } from "reactstrap";
-// import { isLoggedIn } from "../../util/method";
+import { connect } from "react-redux";
+import { updateLoadingAction } from "../../redux/actions";
 
 import SuggestionBox from "../../components/SuggestionBox";
+// import { isLoggedIn } from "../../util/method";
 
 class FundsForm extends Component {
   constructor(props) {
@@ -72,6 +74,8 @@ class FundsForm extends Component {
     // console.log("form data", this.state.form, this.props.history);
     // api call
 
+    this.props.updateLoading(true);
+
     const portfolios = [
       {
         stock: "Chambal Fertilizers & Chemicals Ltd. ",
@@ -125,7 +129,10 @@ class FundsForm extends Component {
       ...portfolios
     ];
 
-    this.props.history.push("/portfolio-overview", tableData);
+    setTimeout(() => {
+      this.props.updateLoading(false);
+      this.props.history.push("/portfolio-overview", tableData);
+    }, 5000);
   };
 
   render() {
@@ -173,4 +180,19 @@ class FundsForm extends Component {
   }
 }
 
-export default FundsForm;
+const mapStateToProps = state => {
+  return {
+    loading: state.loading.loadState
+  };
+};
+
+const mapDispatchToProps = dispatch => {
+  return {
+    updateLoading: loading => dispatch(updateLoadingAction(loading))
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(FundsForm);
