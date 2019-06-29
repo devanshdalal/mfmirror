@@ -4,12 +4,13 @@ import { connect } from "react-redux";
 import { updateLoadingAction } from "../../redux/actions";
 
 import SuggestionBox from "../../components/SuggestionBox";
+import PortfolioOverview from "./PortfolioOverview"
 // import { isLoggedIn } from "../../util/method";
 
 class FundsForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { form: {}, rowsPrinted: 0 };
+    this.state = { form: {}, rowsPrinted: 0, serverData: [] };
     this.rows = [];
   }
 
@@ -74,7 +75,7 @@ class FundsForm extends Component {
     // console.log("form data", this.state.form, this.props.history);
     // api call
 
-    this.props.updateLoading(true);
+    // this.props.updateLoading(true);
 
     const portfolios = [
       {
@@ -130,14 +131,16 @@ class FundsForm extends Component {
     ];
 
     setTimeout(() => {
-      this.props.updateLoading(false);
-      this.props.history.push("/portfolio-overview", tableData);
+      this.setState({ serverData: tableData })
+      // this.props.updateLoading(false);
+      // this.props.history.push("/portfolio-overview", tableData);
     }, 5000);
   };
 
   render() {
     return (
-      <div className="FundsForm">
+     	<React.Fragment>
+	 <div className="FundsForm">
         <div className="app-container">
           <Form
             onSubmit={e => {
@@ -176,6 +179,8 @@ class FundsForm extends Component {
           </Form>
         </div>
       </div>
+  {this.state.serverData.length ? <PortfolioOverview location={{ state:this.state.serverData}} />: void 0}
+  </React.Fragment>
     );
   }
 }

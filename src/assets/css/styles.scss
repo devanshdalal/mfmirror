@@ -472,7 +472,8 @@ code {
 .FundsForm {
   max-width: 618px;
   width: 100%;
-  margin-left: 32px;
+//  margin-left: 32px;
+  margin-bottom: 20px;
   &__table {
     margin-bottom: 0;
     & th {
@@ -500,6 +501,7 @@ code {
     width: 100%;
     height: 100%;
     display: flex;
+    padding-bottom: 15px;
   }
   .WindowScroller {
     width: 100%;
