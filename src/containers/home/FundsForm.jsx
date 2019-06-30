@@ -73,6 +73,17 @@ class FundsForm extends Component {
     });
   };
 
+convertStateData = (formData) => {
+const covertedData = {};
+Object.keys(formData).map(key=> {
+if( key.indexOf("fundName") != -1){
+        let inputKey = key.replace("fundName",'')
+        let weightKey = `weight${inputKey}`
+        covertedData[formData[key]] = formData[weightKey] ? formData[weightKey]: 0
+}})
+return covertedData;
+}
+
   handleSubmitBtn = () => {
     this.setState({ loading: true})
     // console.log("form data", this.state.form, this.props.history);
@@ -127,6 +138,8 @@ class FundsForm extends Component {
 
   var tableData = [
   ];
+
+
 
   window.state = this.state;
     console.log(this.state.form)
