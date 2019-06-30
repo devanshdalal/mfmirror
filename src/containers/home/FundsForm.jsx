@@ -5,13 +5,14 @@ import { updateLoadingAction } from "../../redux/actions";
 
 import SuggestionBox from "../../components/SuggestionBox";
 import PortfolioOverview from "./PortfolioOverview"
+import loaderSvg from "../../assets/svg/loading-spinner.svg"
 // import { isLoggedIn } from "../../util/method";
 import { getportfolio } from "../../util/method";
 
 class FundsForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { form: {}, rowsPrinted: 0, serverData: [] };
+    this.state = { form: {}, rowsPrinted: 0, serverData: [], loading: false };
     this.rows = [];
   }
 
@@ -73,6 +74,7 @@ class FundsForm extends Component {
   };
 
   handleSubmitBtn = () => {
+    this.setState({ loading: true})
     // console.log("form data", this.state.form, this.props.history);
     // api call
 
@@ -117,16 +119,16 @@ class FundsForm extends Component {
     ];
 
     var config = {
-        "params": {
-          "kotak-small-cap-fund-direct-plan-growth.csv": 0.6,
-          "hdfc-small-cap-fund-direct-plan-growth.csv": 0.4
-        }
-      };
+      "params": {
+        "kotak-small-cap-fund-direct-plan-growth.csv": 0.6,
+        "hdfc-small-cap-fund-direct-plan-growth.csv": 0.4
+      }
+    };
 
-    var tableData = [
-    ];
+  var tableData = [
+  ];
 
-    window.state = this.state;
+  window.state = this.state;
     console.log(this.state.form)
     console.log('hr')
 
@@ -134,7 +136,7 @@ class FundsForm extends Component {
       {
         tableData = res.data;
         console.log(res)
-        this.setState({ serverData: tableData })
+        this.setState({ serverData: tableData, loading: false })
       }
     );
 
@@ -186,6 +188,7 @@ class FundsForm extends Component {
           </Form>
         </div>
       </div>
+    {this.state.loading?<div style={{height: 50, width: 50, margin: "auto"}} > <img src={loaderSvg} alt="loader" /></div> : void 0}
   {this.state.serverData.length ? <PortfolioOverview location={{ state:this.state.serverData}} />: void 0}
   </React.Fragment>
     );
