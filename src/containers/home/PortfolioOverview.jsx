@@ -72,10 +72,10 @@ this.setState({ count: this.state.count+1})
                         sortDirection={this.state.sortDirection}
                         rowGetter={({ index }) => sortedList[index]}
                       >
-                        <Column label="Stock Invested in" dataKey="stock" width={300} />
+                        <Column label="Stock Invested in" dataKey="Stock Invested in" width={300} />
                         <Column label="Sector" dataKey="sector" width={200} />
                         <Column label="value(Cr)" dataKey="value" width={100} />
-                        <Column label="% of Total Holdings" dataKey="totalHoldings" width={200} />
+                        <Column label="% of Total Holdings" dataKey="% of Total Holdings" width={200} />
                         <Column label="Quantity" dataKey="quantity" width={100} />
                       </TableVirtualized>
                     </div>

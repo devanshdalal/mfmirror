@@ -6,6 +6,7 @@ import { updateLoadingAction } from "../../redux/actions";
 import SuggestionBox from "../../components/SuggestionBox";
 import PortfolioOverview from "./PortfolioOverview"
 // import { isLoggedIn } from "../../util/method";
+import { getportfolio } from "../../util/method";
 
 class FundsForm extends Component {
   constructor(props) {
@@ -115,23 +116,29 @@ class FundsForm extends Component {
       }
     ];
 
-    const tableData = [
-      ...portfolios,
-      ...portfolios,
-      ...portfolios,
-      ...portfolios,
-      ...portfolios,
-      ...portfolios,
-      ...portfolios,
-      ...portfolios,
-      ...portfolios,
-      ...portfolios,
-      ...portfolios,
-      ...portfolios
+    var config = {
+        "params": {
+          "kotak-small-cap-fund-direct-plan-growth.csv": 0.6,
+          "hdfc-small-cap-fund-direct-plan-growth.csv": 0.4
+        }
+      };
+
+    var tableData = [
     ];
 
+    window.state = this.state;
+    console.log(this.state.form)
+    console.log('hr')
+
+    getportfolio(config).then(res => 
+      {
+        tableData = res.data;
+        console.log(res)
+        this.setState({ serverData: tableData })
+      }
+    );
+
     setTimeout(() => {
-      this.setState({ serverData: tableData })
       // this.props.updateLoading(false);
       // this.props.history.push("/portfolio-overview", tableData);
     }, 5000);

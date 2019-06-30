@@ -9,6 +9,15 @@ export const isLoggedIn = () => {
   return WebServiceRequest.callWebService(options);
 };
 
+export const getportfolio = (data) => {
+  let options = {
+    method: "POST",
+    url: "/getportfolio",
+    data: data
+  };
+  return WebServiceRequest.callWebService(options);
+};
+
 const EMAIL_PATTERN = /^[a-zA-Z0-9._-|+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
 export const VALIDATE_EMAIL = email => {
