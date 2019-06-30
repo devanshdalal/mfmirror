@@ -17,10 +17,7 @@ class FundsForm extends Component {
   }
 
   componentDidMount() {
-    // isLoggedIn().then(result => {
-    //   console.log("reeeeeee", result);
-    // });
-    this.renderRows(1, 5);
+    this.renderRows(1, 2);
   }
 
   renderRows = (startIndex, endIndex = startIndex) => {
@@ -74,14 +71,16 @@ class FundsForm extends Component {
   };
 
 convertStateData = (formData) => {
-const covertedData = {};
-Object.keys(formData).map(key=> {
-if( key.indexOf("fundName") != -1){
-        let inputKey = key.replace("fundName",'')
-        let weightKey = `weight${inputKey}`
-        covertedData[formData[key]] = formData[weightKey] ? formData[weightKey]: 0
-}})
-return covertedData;
+  const covertedData = {};
+  Object.keys(formData).map(key=> {
+  if( key.indexOf("fundName") !== -1){
+    let inputKey = key.replace("fundName",'')
+    let weightKey = `weight${inputKey}`
+    covertedData[formData[key]] = formData[weightKey] ? parseFloat(formData[weightKey]): 0.0
+  }})
+  console.log(formData)
+  console.log(covertedData)
+  return covertedData;
 }
 
   handleSubmitBtn = () => {
@@ -91,72 +90,15 @@ return covertedData;
 
     // this.props.updateLoading(true);
 
-    const portfolios = [
-      {
-        stock: "Chambal Fertilizers & Chemicals Ltd. ",
-        sector: "Fertilisers-composite",
-        value: 2594.2,
-        totalHoldings: 3.09,
-        quantity: 1.37
-      },
-      {
-        stock: "Sonata Software Ltd. ",
-        sector: "Computers - software",
-        value: 2583.2,
-        totalHoldings: 3.08,
-        quantity: 72.3
-      },
-      {
-        stock: "NIIT Techonologies Ltd. ",
-        sector: "Computers - software",
-        value: 2524.2,
-        totalHoldings: 3.0,
-        quantity: 19.2
-      },
-      {
-        stock: "Bank Of Baroda ",
-        sector: "Banks",
-        value: 2345.2,
-        totalHoldings: 2.78,
-        quantity: 72.3
-      },
-      {
-        stock: "Kalpataru Power Transmission Ltd. ",
-        sector: "Flim production, distribution & exhibition",
-        value: 21345.2,
-        totalHoldings: 0.03,
-        quantity: 35.3
-      }
-    ];
-
     var config = {
-      "params": {
-        "kotak-small-cap-fund-direct-plan-growth.csv": 0.6,
-        "hdfc-small-cap-fund-direct-plan-growth.csv": 0.4
-      }
+      "params": this.convertStateData(this.state.form)
     };
-
-  var tableData = [
-  ];
-
-
-
-  window.state = this.state;
-    console.log(this.state.form)
-    console.log('hr')
 
     getportfolio(config).then(res => 
       {
-        tableData = res.data;
-        console.log(res)
-        this.setState({ serverData: tableData, loading: false })
+        this.setState({ serverData: res.data, loading: false })
       }
     );
-
-    setTimeout(() => {
-      // this.props.updateLoading(false);
-      // this.props.history.push("/portfolio-overview", tableData);
-    }, 5000);
   };
 
   render() {

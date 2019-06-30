@@ -18,6 +18,14 @@ export const getportfolio = (data) => {
   return WebServiceRequest.callWebService(options);
 };
 
+export const getfunds = () => {
+  let options = {
+    method: "GET",
+    url: "/getfunds"
+  };
+  return WebServiceRequest.callWebService(options);
+};
+
 const EMAIL_PATTERN = /^[a-zA-Z0-9._-|+]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
 export const VALIDATE_EMAIL = email => {
