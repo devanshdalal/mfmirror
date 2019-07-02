@@ -72,7 +72,7 @@ class FundsForm extends Component {
 
   convertStateData = formData => {
     const covertedData = {};
-    Object.keys(formData).map(key => {
+    Object.keys(formData).forEach(key => {
       if (key.indexOf("fundName") !== -1) {
         let inputKey = key.replace("fundName", "");
         let weightKey = `weight${inputKey}`;
