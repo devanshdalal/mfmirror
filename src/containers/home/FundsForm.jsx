@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import { updateLoadingAction } from "../../redux/actions";
 
 import SuggestionBox from "../../components/SuggestionBox";
-import PortfolioOverview from "./PortfolioOverview"
-import loaderSvg from "../../assets/svg/loading-spinner.svg"
+import PortfolioOverview from "./PortfolioOverview";
+import loaderSvg from "../../assets/svg/loading-spinner.svg";
 // import { isLoggedIn } from "../../util/method";
 import { getportfolio } from "../../util/method";
 
@@ -70,82 +70,96 @@ class FundsForm extends Component {
     });
   };
 
-convertStateData = (formData) => {
-  const covertedData = {};
-  Object.keys(formData).map(key=> {
-  if( key.indexOf("fundName") !== -1){
-    let inputKey = key.replace("fundName",'')
-    let weightKey = `weight${inputKey}`
-    covertedData[formData[key]] = formData[weightKey] ? parseFloat(formData[weightKey]): 0.0
-  }})
-  console.log(formData)
-  console.log(covertedData)
-  return covertedData;
-}
+  convertStateData = formData => {
+    const covertedData = {};
+    Object.keys(formData).map(key => {
+      if (key.indexOf("fundName") !== -1) {
+        let inputKey = key.replace("fundName", "");
+        let weightKey = `weight${inputKey}`;
+        covertedData[formData[key]] = formData[weightKey]
+          ? parseFloat(formData[weightKey])
+          : 0.0;
+      }
+    });
+    console.log(formData);
+    console.log(covertedData);
+    return covertedData;
+  };
 
   handleSubmitBtn = () => {
-    this.setState({ loading: true})
+    this.setState({ loading: true });
     // console.log("form data", this.state.form, this.props.history);
     // api call
 
     // this.props.updateLoading(true);
 
     var config = {
-      "params": this.convertStateData(this.state.form)
+      params: this.convertStateData(this.state.form)
     };
 
-    getportfolio(config).then(res => 
-      {
-        this.setState({ serverData: res.data, loading: false })
-      }
-    );
+    getportfolio(config).then(res => {
+      this.setState({ serverData: res.data, loading: false });
+    });
   };
 
   render() {
     return (
-     	<React.Fragment>
-	 <div className="FundsForm">
-        <div className="app-container">
-          <Form
-            onSubmit={e => {
-              e.preventDefault();
-              console.log("datata", e);
-            }}
-          >
-            <Table borderless className="FundsForm__table">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Fund</th>
-                  {/* <th>Percentage</th> */}
-                  <th>Weight</th>
-                </tr>
-              </thead>
-              <tbody>{this.rows}</tbody>
-            </Table>
-            <div className="FundsForm__formControl">
-              <div className="FundsForm__addRow">
-                <Button color="secondary" onClick={() => this.renderRows(this.state.rowsPrinted + 1)}>
-                  Add row
-                </Button>
-              </div>
+      <React.Fragment>
+        <div className="FundsForm">
+          <div className="app-container">
+            <Form
+              onSubmit={e => {
+                e.preventDefault();
+                console.log("datata", e);
+              }}
+            >
+              <Table borderless className="FundsForm__table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Fund</th>
+                    {/* <th>Percentage</th> */}
+                    <th>Weight</th>
+                  </tr>
+                </thead>
+                <tbody>{this.rows}</tbody>
+              </Table>
+              <div className="FundsForm__formControl">
+                <div className="FundsForm__addRow">
+                  <Button
+                    color="secondary"
+                    onClick={() => this.renderRows(this.state.rowsPrinted + 1)}
+                  >
+                    Add row
+                  </Button>
+                </div>
 
-              <div className="FundsForm__submit">
-                <Button
-                  color="success"
-                  // type="submit"
-                  onClick={this.handleSubmitBtn}
-                >
-                  Submit →
-                </Button>
+                <div className="FundsForm__submit">
+                  <Button
+                    color="success"
+                    // type="submit"
+                    onClick={this.handleSubmitBtn}
+                  >
+                    Submit →
+                  </Button>
+                </div>
               </div>
-            </div>
-          </Form>
+            </Form>
+          </div>
         </div>
-      </div>
-    {this.state.loading?<div style={{height: 50, width: 50, margin: "auto"}} > <img src={loaderSvg} alt="loader" /></div> : void 0}
-  {this.state.serverData.length ? <PortfolioOverview location={{ state:this.state.serverData}} />: void 0}
-  </React.Fragment>
+        {this.state.loading ? (
+          <div style={{ height: 50, width: 50, margin: "auto" }}>
+            <img src={loaderSvg} alt="loader" />
+          </div>
+        ) : (
+          void 0
+        )}
+        {this.state.serverData.length ? (
+          <PortfolioOverview location={{ state: this.state.serverData }} />
+        ) : (
+          void 0
+        )}
+      </React.Fragment>
     );
   }
 }

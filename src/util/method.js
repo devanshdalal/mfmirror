@@ -9,7 +9,7 @@ export const isLoggedIn = () => {
   return WebServiceRequest.callWebService(options);
 };
 
-export const getportfolio = (data) => {
+export const getportfolio = data => {
   let options = {
     method: "POST",
     url: "/getportfolio",
