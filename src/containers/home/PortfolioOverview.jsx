@@ -12,10 +12,19 @@ class PortfolioOverview extends Component {
     this.state = {
       sortedList,
       sortBy,
-      sortDirection,
-	count: 0
+      sortDirection
     };
   }
+
+  componentWillReceiveProps(nextProps) {
+    if (this._windowScroller && this.props.rowsPrinted !== nextProps.rowsPrinted) {
+      this._windowScroller.updatePosition();
+    }
+  }
+
+  _setRef = windowScroller => {
+    this._windowScroller = windowScroller;
+  };
 
   _sort = ({ sortBy, sortDirection }) => {
     const sortedList = this._sortList({ sortBy, sortDirection });
@@ -41,23 +50,18 @@ class PortfolioOverview extends Component {
     });
   };
 
-componentWillReceiveProps(){
-this.setState({ count: this.state.count+1})
-}
-
   render() {
-    const { sortedList, count } = this.state;
+    const { sortedList } = this.state;
     return (
       <div className="PortfolioOverview">
         <div className="app-container">
-          <WindowScroller ref={this._setRef} count={count}>
+          <WindowScroller ref={this._setRef}>
             {({ height, isScrolling, registerChild, onChildScroll, scrollTop }) => (
               <div className="WindowScroller">
                 <AutoSizer disableHeight>
                   {({ width }) => (
                     <div ref={registerChild}>
                       <TableVirtualized
-                  			reRenderTable={count}
                         width={width}
                         height={height}
                         autoHeight
