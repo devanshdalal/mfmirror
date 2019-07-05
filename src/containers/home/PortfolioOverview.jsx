@@ -71,6 +71,7 @@ class PortfolioOverview extends Component {
                         headerHeight={50}
                         rowHeight={40}
                         rowCount={sortedList.length}
+                        overscanRowCount={4}
                         sort={this._sort}
                         sortBy={this.state.sortBy}
                         sortDirection={this.state.sortDirection}
