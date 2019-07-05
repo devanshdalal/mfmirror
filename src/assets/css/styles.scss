@@ -401,8 +401,9 @@ html {
 body {
   background-image: linear-gradient(-140deg, #2c7dbc 15%, #7cccc5 70%);
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans",
-    "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -437,7 +438,8 @@ body {
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
 }
 
 .marginPadding {
@@ -472,7 +474,7 @@ code {
 .FundsForm {
   max-width: 618px;
   width: 100%;
-//  margin-left: 32px;
+  //  margin-left: 32px;
   margin-bottom: 20px;
   &__table {
     margin-bottom: 0;
@@ -499,7 +501,6 @@ code {
   position: relative;
   .app-container {
     width: 100%;
-    height: 100%;
     display: flex;
     padding-bottom: 15px;
   }
