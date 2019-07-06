@@ -18,7 +18,7 @@ class PortfolioOverview extends Component {
 
   componentWillReceiveProps(nextProps) {
     if (this._windowScroller && this.props.rowsPrinted !== nextProps.rowsPrinted) {
-      this._windowScroller.updatePosition();
+      this.setState({}, () => this._windowScroller.updatePosition());
     }
   }
 
