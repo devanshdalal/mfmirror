@@ -8,6 +8,7 @@ import PortfolioOverview from "./PortfolioOverview";
 import loaderSvg from "../../assets/svg/loading-spinner.svg";
 // import { isLoggedIn } from "../../util/method";
 import { getportfolio } from "../../util/method";
+require('dotenv').config()
 
 class FundsForm extends Component {
   constructor(props) {
