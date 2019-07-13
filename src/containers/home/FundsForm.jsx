@@ -8,7 +8,6 @@ import PortfolioOverview from "./PortfolioOverview";
 import loaderSvg from "../../assets/svg/loading-spinner.svg";
 // import { isLoggedIn } from "../../util/method";
 import { getportfolio } from "../../util/method";
-import { WebServiceRequest } from "../../util/webRequest";
 
 class FundsForm extends Component {
   constructor(props) {
@@ -102,7 +101,7 @@ class FundsForm extends Component {
   };
 
   render() {
-    console.log("BASE_URL@@@@@@@@", WebServiceRequest.BASE_URL)
+    console.log("BASE_URL@@@@@@@@", process.env)
     return (
       <React.Fragment>
         <div className="FundsForm">
