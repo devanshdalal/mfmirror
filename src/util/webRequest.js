@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = process.env.SERVER_URL || "http://localhost:5000";
 
 const callWebService = options => {
   const axiosInstance = axios.create({
