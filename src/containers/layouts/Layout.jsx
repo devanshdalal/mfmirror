@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import Header from "./Header";
 import Footer from "./Footer";
-import LoadingSpinner from "../../components/LoadingSpinner";
+import LoadingSpinner from "components/LoadingSpinner";
 
 class Layout extends Component {
   render() {

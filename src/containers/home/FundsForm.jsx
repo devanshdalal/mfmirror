@@ -1,11 +1,11 @@
 import React, { Component } from "react";
 import { Table, Button, Form, Input } from "reactstrap";
 import { connect } from "react-redux";
-import { updateLoadingAction } from "../../redux/actions";
+import { updateLoadingAction } from "redux/actions";
 
-import SuggestionBox from "../../components/SuggestionBox";
+import SuggestionBox from "components/SuggestionBox";
 import PortfolioOverview from "./PortfolioOverview";
-import loaderSvg from "../../assets/svg/loading-spinner.svg";
+import loaderSvg from "assets/svg/loading-spinner.svg";
 // import { isLoggedIn } from "../../util/method";
 import { getportfolio } from "util/method";
 
