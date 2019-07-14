@@ -7,8 +7,7 @@ import SuggestionBox from "../../components/SuggestionBox";
 import PortfolioOverview from "./PortfolioOverview";
 import loaderSvg from "../../assets/svg/loading-spinner.svg";
 // import { isLoggedIn } from "../../util/method";
-import { getportfolio } from "../../util/method";
-require('dotenv').config()
+import { getportfolio } from "util/method";
 
 class FundsForm extends Component {
   constructor(props) {
@@ -102,7 +101,6 @@ class FundsForm extends Component {
   };
 
   render() {
-    console.log("BASE_URL@@@@@@@@", process.env)
     return (
       <React.Fragment>
         <div className="FundsForm">
