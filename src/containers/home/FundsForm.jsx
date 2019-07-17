@@ -7,16 +7,30 @@ import SuggestionBox from "components/SuggestionBox";
 import PortfolioOverview from "./PortfolioOverview";
 import loaderSvg from "assets/svg/loading-spinner.svg";
 // import { isLoggedIn } from "../../util/method";
-import { getportfolio } from "util/method";
+import { getportfolio, getfunds } from "util/method";
 
 class FundsForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { form: {}, rowsPrinted: 0, serverData: [], loading: false };
+    this.state = {
+      form: {},
+      rowsPrinted: 0,
+      serverData: [],
+      loading: false,
+      suggestionBoxData: []
+    };
     this.rows = [];
   }
 
   componentDidMount() {
+    getfunds().then(res => {
+      console.log(res);
+      if (res.data.length) {
+        this.setState({ suggestionBoxData: res.data });
+        this.rows = [];
+        this.renderRows(1, 2);
+      }
+    });
     this.renderRows(1, 2);
   }
 
@@ -35,6 +49,7 @@ class FundsForm extends Component {
                 autoComplete: "off"
               }}
               setValue={this.onChange}
+              suggestionBoxData={this.state.suggestionBoxData}
             />
           </td>
           {/* <td key={`percentage${i}`}>
@@ -76,7 +91,9 @@ class FundsForm extends Component {
       if (key.indexOf("fundName") !== -1) {
         let inputKey = key.replace("fundName", "");
         let weightKey = `weight${inputKey}`;
-        covertedData[formData[key]] = formData[weightKey] ? parseFloat(formData[weightKey]) : 0.0;
+        covertedData[formData[key]] = formData[weightKey]
+          ? parseFloat(formData[weightKey])
+          : 0.0;
       }
     });
     console.log(formData);
@@ -124,7 +141,10 @@ class FundsForm extends Component {
               </Table>
               <div className="FundsForm__formControl">
                 <div className="FundsForm__addRow">
-                  <Button color="secondary" onClick={() => this.renderRows(this.state.rowsPrinted + 1)}>
+                  <Button
+                    color="secondary"
+                    onClick={() => this.renderRows(this.state.rowsPrinted + 1)}
+                  >
                     Add row
                   </Button>
                 </div>

@@ -2,7 +2,6 @@ import React from "react";
 import { Input } from "reactstrap";
 import { ArrowKeyStepper, AutoSizer, List } from "react-virtualized";
 import classNames from "classnames";
-import { getfunds } from "../util/method";
 
 // import type { Portal } from "../../types/Portal";
 
@@ -24,13 +23,18 @@ class SuggestionBox extends React.Component {
   }
 
   componentDidMount() {
-    getfunds().then(res => 
-      {
-        console.log(res)
-        stockData = JSON.parse(JSON.stringify(res.data));
-        this.setState({ list: res.data, loading: false })
-      }
-    )
+    this.setState({
+      list: JSON.parse(JSON.stringify(this.props.suggestionBoxData))
+    });
+    stockData = this.props.suggestionBoxData;
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.list.length !== nextProps.suggestionBoxData.length) {
+      stockData = nextProps.suggestionBoxData;
+      return { list: JSON.parse(JSON.stringify(nextProps.suggestionBoxData)) };
+    }
+    return null;
   }
 
   rowRenderer = ({ key, index, isScrolling, isVisible, style }) => {
@@ -181,5 +185,4 @@ SuggestionBox.displayName = "SuggestionBox";
 
 export default SuggestionBox;
 
-let stockData = [
-];
+let stockData = [];
