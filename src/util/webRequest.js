@@ -6,6 +6,7 @@ const callWebService = options => {
   const axiosInstance = axios.create({
     baseURL: BASE_URL,
     // withCredentials: true,
+    crossDomain: true,
     timeout: options.timeout || 1000 * 50
   });
   return axiosInstance(options);
