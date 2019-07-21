@@ -8,7 +8,7 @@ class PortfolioOverview extends Component {
 
     const sortBy = "totalHoldings";
     const sortDirection = "ASC";
-    const sortedList = this._sortList({ sortBy, sortDirection });
+    const sortedList = this._sortList({ sortBy, sortDirection, portfolio: props.portfolio });
     this.state = {
       sortedList,
       sortBy,
@@ -17,8 +17,14 @@ class PortfolioOverview extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    const { sortBy, sortDirection } = this.state;
     if (this._windowScroller && this.props.rowsPrinted !== nextProps.rowsPrinted) {
       this.setState({}, () => this._windowScroller.updatePosition());
+    }
+    if (nextProps.portfolio !== this.props.portfolio) {
+      this.setState({ sortedList: this._sortList({ sortBy, sortDirection, portfolio: nextProps.portfolio }) }, () =>
+        this._windowScroller && this._windowScroller.updatePosition()
+      );
     }
   }
 
@@ -31,10 +37,9 @@ class PortfolioOverview extends Component {
     this.setState({ sortBy, sortDirection, sortedList });
   };
 
-  _sortList = ({ sortBy, sortDirection }) => {
+  _sortList = ({ sortBy, sortDirection, portfolio }) => {
     const isSortAscending = sortDirection === "ASC";
-    const { state } = this.props.location;
-    return state.sort((a, b) => {
+    return portfolio.sort((a, b) => {
       let result = 0;
       if (a[sortBy] < b[sortBy]) {
         result = -1;

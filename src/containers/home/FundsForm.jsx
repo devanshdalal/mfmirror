@@ -91,9 +91,7 @@ class FundsForm extends Component {
       if (key.indexOf("fundName") !== -1) {
         let inputKey = key.replace("fundName", "");
         let weightKey = `weight${inputKey}`;
-        covertedData[formData[key]] = formData[weightKey]
-          ? parseFloat(formData[weightKey])
-          : 0.0;
+        covertedData[formData[key]] = formData[weightKey] ? parseFloat(formData[weightKey]) : 0.0;
       }
     });
     console.log(formData);
@@ -141,10 +139,7 @@ class FundsForm extends Component {
               </Table>
               <div className="FundsForm__formControl">
                 <div className="FundsForm__addRow">
-                  <Button
-                    color="secondary"
-                    onClick={() => this.renderRows(this.state.rowsPrinted + 1)}
-                  >
+                  <Button color="secondary" onClick={() => this.renderRows(this.state.rowsPrinted + 1)}>
                     Add row
                   </Button>
                 </div>
@@ -170,7 +165,7 @@ class FundsForm extends Component {
           void 0
         )}
         {this.state.serverData.length ? (
-          <PortfolioOverview location={{ state: this.state.serverData }} rowsPrinted={this.state.rowsPrinted} />
+          <PortfolioOverview portfolio={[...this.state.serverData]} rowsPrinted={this.state.rowsPrinted} />
         ) : (
           void 0
         )}
