@@ -24,19 +24,14 @@ class SuggestionBox extends React.Component {
 
   componentDidMount() {
     this.setState({
-      list: JSON.parse(JSON.stringify(this.props.suggestionBoxData))
+      list: [...this.props.suggestionBoxData]
     });
-    stockData = this.props.suggestionBoxData;
   }
-
-  static getDerivedStateFromProps(nextProps, prevState) {
-    if (prevState.list.length !== nextProps.suggestionBoxData.length) {
-      stockData = nextProps.suggestionBoxData;
-      return { list: JSON.parse(JSON.stringify(nextProps.suggestionBoxData)) };
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.props.suggestionBoxData.length !== nextProps.suggestionBoxData.length) {
+      this.setState({ list: [...nextProps.suggestionBoxData] });
     }
-    return null;
   }
-
   rowRenderer = ({ key, index, isScrolling, isVisible, style }) => {
     const classActive = classNames({
       activeItem: this.state.courser === index
@@ -58,8 +53,7 @@ class SuggestionBox extends React.Component {
             searchString: this.state.list[index],
             showList: false
           });
-          setValue &&
-            setValue({ target: { name, value: this.state.list[index] } });
+          setValue && setValue({ target: { name, value: this.state.list[index] } });
         }}
       >
         {this.state.list[index]}
@@ -106,18 +100,18 @@ class SuggestionBox extends React.Component {
   };
 
   searching = event => {
-    const { setValue } = this.props;
+    const { setValue, suggestionBoxData } = this.props;
     let searchedData = [];
     const text = event.target.value.trim().toLowerCase();
     if (text && text.length) {
-      stockData.map((item, index) => {
+      suggestionBoxData.map((item, index) => {
         if (item.toLowerCase().indexOf(text) !== -1) {
           searchedData.push(item);
         }
         return void 0;
       });
     } else {
-      searchedData = [...stockData];
+      searchedData = [...suggestionBoxData];
     }
     this.setState({
       list: searchedData,
@@ -184,5 +178,3 @@ SuggestionBox.defaultProps = {};
 SuggestionBox.displayName = "SuggestionBox";
 
 export default SuggestionBox;
-
-let stockData = [];
