@@ -3,7 +3,7 @@ import { Route, Redirect, Switch } from "react-router-dom";
 
 import Layout from "./layouts/Layout";
 import FundsForm from "./home/FundsForm";
-import PortfolioOverview from "./PortfolioOverview";
+import PortfolioOverview from "./layouts/PortfolioOverview";
 
 class Root extends React.Component {
   render() {

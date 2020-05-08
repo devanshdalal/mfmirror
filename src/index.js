@@ -8,14 +8,14 @@ import { Provider } from "react-redux";
 import store from "./redux/store";
 import "./assets/css/styles.scss";
 import "./assets/css/styles-xs.scss";
-import App from "./containers/Root";
+import Root from "./containers/Root";
 
 import * as serviceWorker from "./serviceWorker";
 
 ReactDOM.render(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <Root />
     </BrowserRouter>
   </Provider>,
   document.getElementById("root")

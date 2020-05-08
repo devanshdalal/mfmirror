@@ -1,25 +1,29 @@
 import axios from "axios";
+import AWS from "aws-sdk";
 
-const BASE_URL = process.env.REACT_APP_SERVER_URL || "http://localhost:5000";
+AWS.config.update({
+  region: "ap-south-1",
+  // accessKeyId default can be used while using the downloadable version of DynamoDB.
+  // For security reasons, do not store AWS Credentials in your files. Use Amazon Cognito instead.
+  accessKeyId: "AKIA2VLYX2H6I53B4EDP",
+  // secretAccessKey default can be used while using the downloadable version of DynamoDB.
+  // For security reasons, do not store AWS Credentials in your files. Use Amazon Cognito instead.
+  secretAccessKey: "iD0jA7B6wIB9Fpmz16Rf0PHda+uRWzGDJLAq2XnW",
+});
 
-const callWebService = options => {
-  const axiosInstance = axios.create({
-    baseURL: BASE_URL,
-    // withCredentials: true,
-    timeout: options.timeout || 1000 * 50
-  });
-  return axiosInstance(options);
+let docClient = new AWS.DynamoDB.DocumentClient();
+
+let params = {
+  TableName: "funds",
 };
 
-const logout = () => {
-  return callWebService({
-    method: "GET",
-    url: "/logout"
+const callWebService = (options) => {
+  docClient.scan(params, function (err, data) {
+    console.log("data", data, "err", err);
   });
+  return null;
 };
 
 export const WebServiceRequest = {
   callWebService,
-  logout,
-  BASE_URL
 };

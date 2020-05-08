@@ -23,9 +23,7 @@ class Layout extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    loading: state.loading.loadState
-  };
+const mapStateToProps = (state) => {
+  return {};
 };
 export default connect(mapStateToProps)(Layout);

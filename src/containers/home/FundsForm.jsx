@@ -1,37 +1,40 @@
 import React, { Component } from "react";
 import { Table, Button, Form, Input } from "reactstrap";
 import { connect } from "react-redux";
-import { updateLoadingAction } from "redux/actions";
+import { updateLoadingAction, putBasketAction } from "redux/actions";
 
 import SuggestionBox from "components/SuggestionBox";
-import PortfolioOverview from "./PortfolioOverview";
+import SaveForm from "components/SaveForm";
+import PortfolioOverview from "../layouts/PortfolioOverview";
 import loaderSvg from "assets/svg/loading-spinner.svg";
 // import { isLoggedIn } from "../../util/method";
 import { getportfolio, getfunds } from "util/method";
+import { getBasketPortfolio } from "util/weightedPortfolio";
 
 class FundsForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       form: {},
+      basket: [],
       rowsPrinted: 0,
       serverData: [],
       loading: false,
-      suggestionBoxData: []
+      suggestionBoxData: [],
     };
     this.rows = [];
+    this.props.updateLoading();
   }
 
   componentDidMount() {
-    getfunds().then(res => {
-      console.log(res);
-      if (res.data.length) {
-        this.setState({ suggestionBoxData: res.data });
-        this.rows = [];
-        this.renderRows(1, 2);
-      }
+    getfunds().then((res) => {
+      this.setState({
+        suggestionBoxData: res.Items.map((v) => {
+          return v.name;
+        }),
+      });
+      this.renderRows(1, 2);
     });
-    this.renderRows(1, 2);
   }
 
   renderRows = (startIndex, endIndex = startIndex) => {
@@ -46,7 +49,7 @@ class FundsForm extends Component {
                 name: `fundName${i}`,
                 id: "fundName",
                 placeholder: "Fund name",
-                autoComplete: "off"
+                autoComplete: "off",
               }}
               setValue={this.onChange}
               suggestionBoxData={this.state.suggestionBoxData}
@@ -79,23 +82,26 @@ class FundsForm extends Component {
     }
   };
 
-  onChange = event => {
+  onChange = (event) => {
     this.setState({
-      form: { ...this.state.form, [event.target.name]: event.target.value }
+      form: { ...this.state.form, [event.target.name]: event.target.value },
     });
   };
 
-  convertStateData = formData => {
-    const covertedData = {};
-    Object.keys(formData).forEach(key => {
+  convertStateData = (formData) => {
+    const covertedData = [];
+    Object.keys(formData).forEach((key) => {
       if (key.indexOf("fundName") !== -1) {
         let inputKey = key.replace("fundName", "");
         let weightKey = `weight${inputKey}`;
-        covertedData[formData[key]] = formData[weightKey] ? parseFloat(formData[weightKey]) : 0.0;
+        covertedData.push({
+          name: formData[key],
+          wt: formData[weightKey] ? parseFloat(formData[weightKey]) : 0.0,
+        });
       }
     });
-    console.log(formData);
-    console.log(covertedData);
+    console.log("formData", formData);
+    console.log("covertedData", covertedData);
     return covertedData;
   };
 
@@ -104,24 +110,30 @@ class FundsForm extends Component {
     // console.log("form data", this.state.form, this.props.history);
     // api call
 
-    // this.props.updateLoading(true);
-
-    var config = {
-      params: this.convertStateData(this.state.form)
-    };
-
-    getportfolio(config).then(res => {
-      this.setState({ serverData: res.data, loading: false });
+    const basket = this.convertStateData(this.state.form);
+    const basketPortfolio = getBasketPortfolio(basket, this.props.funds);
+    console.log("basketPortfolio", basketPortfolio);
+    this.setState({
+      serverData: basketPortfolio,
+      loading: false,
+      basket,
     });
   };
 
+  saveHandler = (name) => {
+    console.log("saveHandler called with", name, this.state.basket);
+    let namedBasket = {};
+    this.props.putBasket({ name, schemes: this.state.basket });
+  };
+
   render() {
+    console.log("serverData1:", this.state.serverData);
     return (
       <React.Fragment>
         <div className="FundsForm">
           <div className="app-container">
             <Form
-              onSubmit={e => {
+              onSubmit={(e) => {
                 e.preventDefault();
                 console.log("datata", e);
               }}
@@ -139,7 +151,10 @@ class FundsForm extends Component {
               </Table>
               <div className="FundsForm__formControl">
                 <div className="FundsForm__addRow">
-                  <Button color="secondary" onClick={() => this.renderRows(this.state.rowsPrinted + 1)}>
+                  <Button
+                    color="secondary"
+                    onClick={() => this.renderRows(this.state.rowsPrinted + 1)}
+                  >
                     Add row
                   </Button>
                 </div>
@@ -165,7 +180,13 @@ class FundsForm extends Component {
           void 0
         )}
         {this.state.serverData.length ? (
-          <PortfolioOverview portfolio={[...this.state.serverData]} rowsPrinted={this.state.rowsPrinted} />
+          <div>
+            <SaveForm saveHandler={this.saveHandler} />
+            <PortfolioOverview
+              portfolio={[...this.state.serverData]}
+              rowsPrinted={this.state.rowsPrinted}
+            />
+          </div>
         ) : (
           void 0
         )}
@@ -174,19 +195,17 @@ class FundsForm extends Component {
   }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
-    loading: state.loading.loadState
+    funds: state.funds,
   };
 };
 
-const mapDispatchToProps = dispatch => {
+const mapDispatchToProps = (dispatch) => {
   return {
-    updateLoading: loading => dispatch(updateLoadingAction(loading))
+    updateLoading: () => dispatch(updateLoadingAction()),
+    putBasket: (namedBasket) => dispatch(putBasketAction(namedBasket)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FundsForm);
+export default connect(mapStateToProps, mapDispatchToProps)(FundsForm);
