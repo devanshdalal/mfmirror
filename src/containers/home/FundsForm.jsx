@@ -1,7 +1,11 @@
 import React, { Component } from "react";
 import { Table, Button, Form, Input } from "reactstrap";
 import { connect } from "react-redux";
-import { updateLoadingAction, putBasketAction } from "redux/actions";
+import {
+  updateLoadingAction,
+  putBasketAction,
+  getBasketsAction,
+} from "redux/actions";
 
 import SuggestionBox from "components/SuggestionBox";
 import SaveForm from "components/SaveForm";
@@ -10,13 +14,13 @@ import loaderSvg from "assets/svg/loading-spinner.svg";
 // import { isLoggedIn } from "../../util/method";
 import { getportfolio, getfunds } from "util/method";
 import { getBasketPortfolio } from "util/weightedPortfolio";
+import get from "lodash/get";
 
 class FundsForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       form: {},
-      basket: [],
       rowsPrinted: 0,
       serverData: [],
       loading: false,
@@ -24,17 +28,34 @@ class FundsForm extends Component {
     };
     this.rows = [];
     this.props.updateLoading();
+    this.props.getBaskets();
   }
 
   componentDidMount() {
+    const { currentBasket, funds } = this.props;
+    console.log("currentBasket", currentBasket, funds);
+    let currentBasketSize = 2;
     getfunds().then((res) => {
+      // ask manish
       this.setState({
-        suggestionBoxData: res.Items.map((v) => {
-          return v.name;
+        suggestionBoxData: res.Items.map((k) => {
+          return k.name;
         }),
       });
-      this.renderRows(1, 2);
+      // this.renderRows(1, currentBasketSize);
     });
+
+    this.renderRows(1, currentBasketSize);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { currentBasket } = this.props;
+    if (prevProps.currentBasket !== currentBasket) {
+      if (currentBasket) {
+        const { form, schemes } = this.backConvertStateData(currentBasket);
+        this.handleChangeBasket(schemes, form);
+      }
+    }
   }
 
   renderRows = (startIndex, endIndex = startIndex) => {
@@ -52,19 +73,15 @@ class FundsForm extends Component {
                 autoComplete: "off",
               }}
               setValue={this.onChange}
+              search={this.state.form[`fundName${i}`]}
               suggestionBoxData={this.state.suggestionBoxData}
             />
+            {console.log(
+              "this.state.form[`fundName${i}`]",
+              this.state.form[`fundName${i}`],
+              i
+            )}
           </td>
-          {/* <td key={`percentage${i}`}>
-            <Input
-              type="text"
-              name={`percentage${i}`}
-              id="percentage"
-              placeholder="Percentage"
-              onChange={this.onChange}
-              value={this.state.form[`percentage${i}`]}
-            />
-          </td> */}
           <td key={`weight${i}`}>
             <Input
               type="number"
@@ -88,6 +105,19 @@ class FundsForm extends Component {
     });
   };
 
+  backConvertStateData = (basketName) => {
+    const { baskets } = this.props;
+    console.log("baskets=", baskets, basketName, baskets[basketName]);
+    const schemes = get(baskets[basketName], "schemes");
+    const form = {};
+    console.log("value=", schemes);
+    schemes.forEach((value, index) => {
+      form[`fundName${index + 1}`] = value["name"];
+      form[`weight${index + 1}`] = value["wt"].toString();
+    });
+    return { form, schemes };
+  };
+
   convertStateData = (formData) => {
     const covertedData = [];
     Object.keys(formData).forEach((key) => {
@@ -107,7 +137,7 @@ class FundsForm extends Component {
 
   handleSubmitBtn = () => {
     this.setState({ loading: true });
-    // console.log("form data", this.state.form, this.props.history);
+    console.log("form data", this.state.form, this.props.history);
     // api call
 
     const basket = this.convertStateData(this.state.form);
@@ -118,6 +148,22 @@ class FundsForm extends Component {
       loading: false,
       basket,
     });
+  };
+
+  handleChangeBasket = (schemes, form) => {
+    const basketPortfolio = getBasketPortfolio(schemes, this.props.funds);
+    console.log("basketPortfolio", basketPortfolio, form);
+    this.setState(
+      {
+        serverData: basketPortfolio,
+        loading: false,
+        form,
+      },
+      () => {
+        this.rows = [];
+        this.renderRows(1, schemes.length);
+      }
+    );
   };
 
   saveHandler = (name) => {
@@ -198,12 +244,21 @@ class FundsForm extends Component {
 const mapStateToProps = (state) => {
   return {
     funds: state.funds,
+    baskets: state.baskets,
+    currentBasket: state.currentBasket,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    updateLoading: () => dispatch(updateLoadingAction()),
+    updateLoading: () => {
+      console.log("dispatching updateLoading");
+      dispatch(updateLoadingAction());
+    },
+    getBaskets: () => {
+      console.log("dispatching getBasketsAction");
+      dispatch(getBasketsAction());
+    },
     putBasket: (namedBasket) => dispatch(putBasketAction(namedBasket)),
   };
 };

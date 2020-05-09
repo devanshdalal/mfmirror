@@ -9,8 +9,8 @@ import {
   CardTitle,
 } from "reactstrap";
 
-import { get } from "lodash";
-import { deleteBasketAction } from "redux/actions";
+import get from "lodash/get";
+import { deleteBasketAction, setCurrentBasketAction } from "redux/actions";
 
 class Footer extends React.Component {
   render() {
@@ -20,12 +20,14 @@ class Footer extends React.Component {
       <React.Fragment>
         {Object.keys(baskets).map((name) => {
           return (
-            <Card>
+            <Card key={name}>
               <CardBody>
                 <CardTitle>
                   <Button close onClick={() => this.props.deleteBasket(name)} />
                 </CardTitle>
-                <CardText>{name}</CardText>
+                <CardText onClick={() => this.props.setCurrentBasket(name)}>
+                  {name}
+                </CardText>
               </CardBody>
             </Card>
           );
@@ -45,6 +47,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     deleteBasket: (name) => dispatch(deleteBasketAction(name)),
+    setCurrentBasket: (name) => dispatch(setCurrentBasketAction(name)),
   };
 };
 

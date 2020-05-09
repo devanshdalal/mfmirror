@@ -18,42 +18,45 @@ class SuggestionBox extends React.Component {
       list: [],
       courser: 0,
       searchString: this.props.search ? this.props.search : "",
-      showList: false
+      showList: false,
     };
   }
 
   componentDidMount() {
     this.setState({
-      list: [...this.props.suggestionBoxData]
+      list: [...this.props.suggestionBoxData],
     });
   }
   UNSAFE_componentWillReceiveProps(nextProps) {
-    if (this.props.suggestionBoxData.length !== nextProps.suggestionBoxData.length) {
+    if (
+      this.props.suggestionBoxData.length !== nextProps.suggestionBoxData.length
+    ) {
       this.setState({ list: [...nextProps.suggestionBoxData] });
     }
   }
   rowRenderer = ({ key, index, isScrolling, isVisible, style }) => {
     const classActive = classNames({
-      activeItem: this.state.courser === index
+      activeItem: this.state.courser === index,
     });
 
     const {
       setValue,
-      inputProps: { name }
+      inputProps: { name },
     } = this.props;
     return (
       <li
         key={key}
         style={style}
         className={`list-item ${classActive}`}
-        onMouseDown={e => {
+        onMouseDown={(e) => {
           e.stopPropagation();
           e.preventDefault();
           this.setState({
             searchString: this.state.list[index],
-            showList: false
+            showList: false,
           });
-          setValue && setValue({ target: { name, value: this.state.list[index] } });
+          setValue &&
+            setValue({ target: { name, value: this.state.list[index] } });
         }}
       >
         {this.state.list[index]}
@@ -61,17 +64,17 @@ class SuggestionBox extends React.Component {
     );
   };
 
-  handleKeyDown = event => {
+  handleKeyDown = (event) => {
     const { courser, list } = this.state;
     const {
       setValue,
-      inputProps: { name }
+      inputProps: { name },
     } = this.props;
     // arrow up/down button should select next/previous list element
     if (event.keyCode === 13) {
       this.setState({
         searchString: list[courser],
-        showList: false
+        showList: false,
       });
       setValue && setValue({ target: { name, value: list[courser] } });
     } else if (event.keyCode === 38 && courser > 0) {
@@ -79,7 +82,7 @@ class SuggestionBox extends React.Component {
       this.setState({
         courser: countUp,
         searchString: list[countUp],
-        showList: true
+        showList: true,
       });
       setValue && setValue({ target: { name, value: list[courser] } });
     } else if (event.keyCode === 40 && courser < list.length - 1) {
@@ -87,19 +90,19 @@ class SuggestionBox extends React.Component {
       this.setState({
         courser: countDown,
         searchString: list[countDown],
-        showList: true
+        showList: true,
       });
       setValue && setValue({ target: { name, value: list[courser] } });
     } else if (event.keyCode === 27) {
       this.setState({
-        showList: false
+        showList: false,
       });
     } else {
       this.setState({ showList: true });
     }
   };
 
-  searching = event => {
+  searching = (event) => {
     const { setValue, suggestionBoxData } = this.props;
     let searchedData = [];
     const text = event.target.value.trim().toLowerCase();
@@ -115,18 +118,18 @@ class SuggestionBox extends React.Component {
     }
     this.setState({
       list: searchedData,
-      searchString: event.target.value
+      searchString: event.target.value,
     });
     setValue && setValue(event);
   };
 
-  onFocus = event => {
+  onFocus = (event) => {
     const { onFocus } = this.props.inputProps;
     this.setState({ showList: true });
     onFocus && onFocus(event);
   };
 
-  onBlur = event => {
+  onBlur = (event) => {
     const { onBlur } = this.props.inputProps;
     this.setState({ showList: false });
     onBlur && onBlur(event);

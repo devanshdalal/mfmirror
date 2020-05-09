@@ -19,6 +19,5 @@ export const getBasketPortfolio = (schemes = [], funds) => {
   Object.keys(portfolioMap).forEach((key, index) => {
     portfolio.push({ stock: key, wt: portfolioMap[key] / totalWt });
   });
-  console.log("portfolio", portfolio);
   return portfolio;
 };
