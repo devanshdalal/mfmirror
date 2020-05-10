@@ -16,16 +16,18 @@ import { getportfolio, getfunds } from "util/method";
 import { getBasketPortfolio } from "util/weightedPortfolio";
 import get from "lodash/get";
 
+const getRandomString = () => new Date().getTime().toString(36);
+
 class FundsForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       form: {},
-      rowsPrinted: 0,
       serverData: [],
       loading: false,
       suggestionBoxData: [],
       formIndex: [1, 2],
+      randomStringValue: getRandomString(),
     };
     this.props.updateLoading();
     this.props.getBaskets();
@@ -56,13 +58,13 @@ class FundsForm extends Component {
   }
 
   renderRows = () => {
-    const { formIndex } = this.state;
+    const { formIndex, randomStringValue } = this.state;
     return formIndex.map((data, index) => (
-      <tr key={index}>
+      <tr key={index + randomStringValue}>
         <th scope="row">{index + 1}</th>
         <td>
           <SuggestionBox
-            key={`fundName${data}` + this.state.form[`fundName${data}`]}
+            // key={`fundName${data}` + this.state.form[`fundName${data}`]}
             inputProps={{
               type: "text",
               name: `fundName${data}`,
@@ -78,7 +80,7 @@ class FundsForm extends Component {
         <td>
           <Input
             type="number"
-            key={`weight${data}` + this.state.form[`weight${data}`]}
+            // key={`weight${data}` + this.state.form[`weight${data}`]}
             name={`weight${data}`}
             id="weight"
             placeholder="Weight"
@@ -91,6 +93,7 @@ class FundsForm extends Component {
   };
 
   onChange = (event) => {
+    console.log("event.target.value", event.target.value);
     this.setState({
       form: { ...this.state.form, [event.target.name]: event.target.value },
     });
@@ -155,13 +158,17 @@ class FundsForm extends Component {
       loading: false,
       form,
       formIndex: newIdexArr,
+      randomStringValue: getRandomString(),
     });
   };
 
   addRowToForm = () => {
     const { formIndex } = this.state;
     const newIndex = formIndex[formIndex.length - 1] + 1;
-    this.setState({ formIndex: [...this.state.formIndex, newIndex] });
+    this.setState({
+      formIndex: [...this.state.formIndex, newIndex],
+      randomStringValue: getRandomString(),
+    });
   };
 
   saveHandler = (name) => {
@@ -225,7 +232,7 @@ class FundsForm extends Component {
             <SaveForm saveHandler={this.saveHandler} />
             <PortfolioOverview
               portfolio={[...this.state.serverData]}
-              rowsPrinted={this.state.rowsPrinted}
+              rowsPrinted={this.state.randomStringValue}
             />
           </div>
         ) : (
