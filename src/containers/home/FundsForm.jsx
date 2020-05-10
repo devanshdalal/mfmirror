@@ -25,8 +25,8 @@ class FundsForm extends Component {
       serverData: [],
       loading: false,
       suggestionBoxData: [],
+      formIndex: [1, 2],
     };
-    this.rows = [];
     this.props.updateLoading();
     this.props.getBaskets();
   }
@@ -42,10 +42,7 @@ class FundsForm extends Component {
           return k.name;
         }),
       });
-      // this.renderRows(1, currentBasketSize);
     });
-
-    this.renderRows(1, currentBasketSize);
   }
 
   componentDidUpdate(prevProps) {
@@ -58,45 +55,39 @@ class FundsForm extends Component {
     }
   }
 
-  renderRows = (startIndex, endIndex = startIndex) => {
-    for (let i = startIndex; i <= endIndex; i++) {
-      this.rows.push(
-        <tr key={i}>
-          <th scope="row">{i}</th>
-          <td key={`fundName${i}`}>
-            <SuggestionBox
-              inputProps={{
-                type: "text",
-                name: `fundName${i}`,
-                id: "fundName",
-                placeholder: "Fund name",
-                autoComplete: "off",
-              }}
-              setValue={this.onChange}
-              search={this.state.form[`fundName${i}`]}
-              suggestionBoxData={this.state.suggestionBoxData}
-            />
-            {console.log(
-              "this.state.form[`fundName${i}`]",
-              this.state.form[`fundName${i}`],
-              i
-            )}
-          </td>
-          <td key={`weight${i}`}>
-            <Input
-              type="number"
-              key={`weight${i}`}
-              name={`weight${i}`}
-              id="weight"
-              placeholder="Weight"
-              onChange={this.onChange}
-              value={this.state.form[`weight${i}`]}
-            />
-          </td>
-        </tr>
-      );
-      if (i === endIndex) this.setState({ rowsPrinted: endIndex });
-    }
+  renderRows = () => {
+    const { formIndex } = this.state;
+    return formIndex.map((data, index) => (
+      <tr key={index}>
+        <th scope="row">{index + 1}</th>
+        <td>
+          <SuggestionBox
+            key={`fundName${data}` + this.state.form[`fundName${data}`]}
+            inputProps={{
+              type: "text",
+              name: `fundName${data}`,
+              id: "fundName",
+              placeholder: "Fund name",
+              autoComplete: "off",
+            }}
+            setValue={this.onChange}
+            search={this.state.form[`fundName${data}`]}
+            suggestionBoxData={this.state.suggestionBoxData}
+          />
+        </td>
+        <td>
+          <Input
+            type="number"
+            key={`weight${data}` + this.state.form[`weight${data}`]}
+            name={`weight${data}`}
+            id="weight"
+            placeholder="Weight"
+            onChange={this.onChange}
+            value={this.state.form[`weight${data}`]}
+          />
+        </td>
+      </tr>
+    ));
   };
 
   onChange = (event) => {
@@ -153,17 +144,24 @@ class FundsForm extends Component {
   handleChangeBasket = (schemes, form) => {
     const basketPortfolio = getBasketPortfolio(schemes, this.props.funds);
     console.log("basketPortfolio", basketPortfolio, form);
-    this.setState(
-      {
-        serverData: basketPortfolio,
-        loading: false,
-        form,
-      },
-      () => {
-        this.rows = [];
-        this.renderRows(1, schemes.length);
+    const newIdexArr = [];
+    Object.keys(form).forEach((key) => {
+      if (key.includes("fund")) {
+        newIdexArr.push(newIdexArr.length + 1);
       }
-    );
+    });
+    this.setState({
+      serverData: basketPortfolio,
+      loading: false,
+      form,
+      formIndex: newIdexArr,
+    });
+  };
+
+  addRowToForm = () => {
+    const { formIndex } = this.state;
+    const newIndex = formIndex[formIndex.length - 1] + 1;
+    this.setState({ formIndex: [...this.state.formIndex, newIndex] });
   };
 
   saveHandler = (name) => {
@@ -193,14 +191,11 @@ class FundsForm extends Component {
                     <th>Weight</th>
                   </tr>
                 </thead>
-                <tbody>{this.rows}</tbody>
+                <tbody>{this.renderRows()}</tbody>
               </Table>
               <div className="FundsForm__formControl">
                 <div className="FundsForm__addRow">
-                  <Button
-                    color="secondary"
-                    onClick={() => this.renderRows(this.state.rowsPrinted + 1)}
-                  >
+                  <Button color="secondary" onClick={this.addRowToForm}>
                     Add row
                   </Button>
                 </div>
