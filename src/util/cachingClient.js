@@ -21,20 +21,14 @@ const dbClient = async (options) => {
   };
   return new Promise(async (resolve, reject) => {
     if (method === "SCAN") {
-      console.log("cache enabled", cache);
       if (cache) {
         const response = lscache.get(table);
-        console.log("response lscache", response);
         if (response) {
-          console.log("cached response", response);
           return resolve(response);
-        } else {
-          console.log("response not cached");
         }
       }
       try {
         const response = await dynamoClient.scan(params).promise();
-        console.log("response not cached:", response);
         lscache.set(table, response, LSCACHE_TIMEOUT);
         return resolve(response);
       } catch (err) {
@@ -52,13 +46,10 @@ const dbClient = async (options) => {
           console.log(err, err.stack);
           return reject(err);
         } else {
-          console.log("data", data);
           return resolve(data);
         }
       });
     } else if (method == "DELETE") {
-      params.Item = options.item;
-      params.ReturnConsumedCapacity = "TOTAL";
       params.Key = {
         name: options.name,
       };

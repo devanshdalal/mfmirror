@@ -15,7 +15,6 @@ import { deleteBasketAction, setCurrentBasketAction } from "redux/actions";
 class Footer extends React.Component {
   render() {
     const baskets = get(this.props, "baskets", {});
-    console.log("baskets", baskets);
     return (
       <React.Fragment>
         {Object.keys(baskets).map((name) => {
@@ -40,7 +39,6 @@ class Footer extends React.Component {
 const mapStateToProps = (state) => {
   return {
     baskets: state.baskets,
-    // funds: state.funds,
   };
 };
 

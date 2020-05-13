@@ -2,13 +2,20 @@ import {
   GET_FUNDS_SUCCESS,
   GET_BASKETS_SUCCESS,
   PUT_BASKET,
+  PUT_BASKET_SUCCESS,
   DELETE_BASKET,
   SET_CURRENT_BASKET,
+  DELETE_BASKET_SUCCESS,
 } from "../constants/actionTypes";
 
 import omit from "lodash/omit";
 
-const initialState = { funds: {}, baskets: {} };
+const initialState = {
+  funds: {},
+  baskets: {},
+  currentBasket: "",
+  basketsToName: {},
+};
 
 const makeNamedState = (table) => {
   let mapped = {};
@@ -18,29 +25,55 @@ const makeNamedState = (table) => {
   return mapped;
 };
 
+const computeBasketsToName = (baskets) => {
+  let mapped = {};
+  Object.keys(baskets).forEach((e) => {
+    const { schemes } = baskets[e];
+    mapped[JSON.stringify(schemes)] = e;
+  });
+  return mapped;
+};
+
 const loadingReducer = (state = initialState, action) => {
   console.log("loadingReducer", action);
   switch (action.type) {
-    case GET_FUNDS_SUCCESS:
+    case GET_FUNDS_SUCCESS: {
       return { ...state, funds: makeNamedState(action.payload) };
-    case GET_BASKETS_SUCCESS:
-      return { ...state, baskets: makeNamedState(action.payload) };
-    case PUT_BASKET:
-      const { name, schemes } = action.payload;
+    }
+    case GET_BASKETS_SUCCESS: {
+      const baskets = makeNamedState(action.payload);
+      return {
+        ...state,
+        baskets,
+        basketsToName: computeBasketsToName(baskets),
+      };
+    }
+    case PUT_BASKET_SUCCESS: {
+      const { name, schemes, permanent } = action.payload;
       console.log("schemes", schemes);
-      // state.baskets[name] = schemes
-      // return { baskets: {...baskets, {name: schemes}} };
+      const key = JSON.stringify(schemes);
       return Object.assign({}, state, {
-        baskets: { ...state.baskets, [name]: schemes },
+        baskets: { ...state.baskets, [name]: { schemes, permanent } },
+        basketsToName: {
+          ...state.basketsToName,
+          [key]: name,
+        },
       });
-    case DELETE_BASKET:
+    }
+    case DELETE_BASKET_SUCCESS: {
+      const { schemes } = state.baskets[action.payload];
+      const key = JSON.stringify(schemes);
       return Object.assign({}, state, {
         baskets: omit(state.baskets, action.payload),
+        basketsToName: omit(state.basketsToName, key),
       });
-    case SET_CURRENT_BASKET:
+    }
+    case SET_CURRENT_BASKET: {
       return { ...state, currentBasket: action.payload };
-    default:
+    }
+    default: {
       return state;
+    }
   }
 };
 

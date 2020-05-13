@@ -25,10 +25,12 @@ redux:
     }
 
     baskets = {
-        'saved_name': [
+        '<saved_name>': {
+            'schemes': [
                 {'name': 's1', 'wt': 'w1'},
                 ...
             ]
+            permanent: <true or false>
         }
         ...
     }

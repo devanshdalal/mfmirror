@@ -34,9 +34,6 @@ class FundsForm extends Component {
   }
 
   componentDidMount() {
-    const { currentBasket, funds } = this.props;
-    console.log("currentBasket", currentBasket, funds);
-    let currentBasketSize = 2;
     getfunds().then((res) => {
       // ask manish
       this.setState({
@@ -93,7 +90,6 @@ class FundsForm extends Component {
   };
 
   onChange = (event) => {
-    console.log("event.target.value", event.target.value);
     this.setState({
       form: { ...this.state.form, [event.target.name]: event.target.value },
     });
@@ -101,10 +97,8 @@ class FundsForm extends Component {
 
   backConvertStateData = (basketName) => {
     const { baskets } = this.props;
-    console.log("baskets=", baskets, basketName, baskets[basketName]);
     const schemes = get(baskets[basketName], "schemes");
     const form = {};
-    console.log("value=", schemes);
     schemes.forEach((value, index) => {
       form[`fundName${index + 1}`] = value["name"];
       form[`weight${index + 1}`] = value["wt"].toString();
@@ -124,19 +118,15 @@ class FundsForm extends Component {
         });
       }
     });
-    console.log("formData", formData);
-    console.log("covertedData", covertedData);
     return covertedData;
   };
 
   handleSubmitBtn = () => {
     this.setState({ loading: true });
-    console.log("form data", this.state.form, this.props.history);
     // api call
 
     const basket = this.convertStateData(this.state.form);
     const basketPortfolio = getBasketPortfolio(basket, this.props.funds);
-    console.log("basketPortfolio", basketPortfolio);
     this.setState({
       serverData: basketPortfolio,
       loading: false,
@@ -146,7 +136,6 @@ class FundsForm extends Component {
 
   handleChangeBasket = (schemes, form) => {
     const basketPortfolio = getBasketPortfolio(schemes, this.props.funds);
-    console.log("basketPortfolio", basketPortfolio, form);
     const newIdexArr = [];
     Object.keys(form).forEach((key) => {
       if (key.includes("fund")) {
@@ -172,13 +161,12 @@ class FundsForm extends Component {
   };
 
   saveHandler = (name) => {
-    console.log("saveHandler called with", name, this.state.basket);
-    let namedBasket = {};
-    this.props.putBasket({ name, schemes: this.state.basket });
+    // const { basketsToName} = this.props
+    const { basket } = this.state;
+    this.props.putBasket({ name, schemes: basket, permanent: false });
   };
 
   render() {
-    console.log("serverData1:", this.state.serverData);
     return (
       <React.Fragment>
         <div className="FundsForm">
@@ -186,7 +174,6 @@ class FundsForm extends Component {
             <Form
               onSubmit={(e) => {
                 e.preventDefault();
-                console.log("datata", e);
               }}
             >
               <Table borderless className="FundsForm__table">
@@ -248,17 +235,16 @@ const mapStateToProps = (state) => {
     funds: state.funds,
     baskets: state.baskets,
     currentBasket: state.currentBasket,
+    basketsToName: state.basketsToName,
   };
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
     updateLoading: () => {
-      console.log("dispatching updateLoading");
       dispatch(updateLoadingAction());
     },
     getBaskets: () => {
-      console.log("dispatching getBasketsAction");
       dispatch(getBasketsAction());
     },
     putBasket: (namedBasket) => dispatch(putBasketAction(namedBasket)),
