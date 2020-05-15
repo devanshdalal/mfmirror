@@ -52,7 +52,7 @@ export function* PutBasketOp(action) {
   console.log("put", baskets);
   if (name in baskets) {
     if (baskets[name].permanent) {
-      action.payload["name"] = name + "( 1 )";
+      action.payload["name"] = name + " ( 1 )";
     }
   }
 
