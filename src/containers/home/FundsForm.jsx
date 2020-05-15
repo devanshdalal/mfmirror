@@ -11,10 +11,9 @@ import SuggestionBox from "components/SuggestionBox";
 import SaveForm from "components/SaveForm";
 import PortfolioOverview from "../layouts/PortfolioOverview";
 import loaderSvg from "assets/svg/loading-spinner.svg";
-// import { isLoggedIn } from "../../util/method";
-import { getportfolio, getfunds } from "util/method";
 import { getBasketPortfolio } from "util/weightedPortfolio";
 import get from "lodash/get";
+import isEqual from "lodash/isEqual";
 
 const getRandomString = () => new Date().getTime().toString(36);
 
@@ -33,24 +32,22 @@ class FundsForm extends Component {
     this.props.getBaskets();
   }
 
-  componentDidMount() {
-    getfunds().then((res) => {
-      // ask manish
-      this.setState({
-        suggestionBoxData: res.Items.map((k) => {
-          return k.name;
-        }),
-      });
-    });
-  }
+  componentDidMount() {}
 
   componentDidUpdate(prevProps) {
-    const { currentBasket } = this.props;
+    const { currentBasket, funds } = this.props;
     if (prevProps.currentBasket !== currentBasket) {
       if (currentBasket) {
         const { form, schemes } = this.backConvertStateData(currentBasket);
         this.handleChangeBasket(schemes, form);
       }
+    }
+    if (!isEqual(prevProps.funds, funds)) {
+      this.setState({
+        suggestionBoxData: Object.keys(funds).map((k) => {
+          return k;
+        }),
+      });
     }
   }
 
@@ -123,7 +120,7 @@ class FundsForm extends Component {
 
   handleSubmitBtn = () => {
     this.setState({ loading: true });
-    // api call
+    console.log("this.state.form", this.state.form);
 
     const basket = this.convertStateData(this.state.form);
     const basketPortfolio = getBasketPortfolio(basket, this.props.funds);
