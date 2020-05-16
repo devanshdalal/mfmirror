@@ -79,7 +79,7 @@ class FundsForm extends Component {
             id="weight"
             placeholder="wt > 0"
             min={0.001}
-            step={0}
+            step={0.00001}
             required
             onChange={this.onChange}
             value={this.state.form[`weight${data}`]}
