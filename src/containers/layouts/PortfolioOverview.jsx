@@ -16,7 +16,7 @@ class PortfolioOverview extends Component {
     const sortedList = this._sortList({
       sortBy,
       sortDirection,
-      portfolio: props.portfolio,
+      portfolio: this.filterLaggards(props.portfolio),
     });
     this.state = {
       sortedList,
@@ -24,6 +24,12 @@ class PortfolioOverview extends Component {
       sortDirection,
     };
   }
+
+  filterLaggards = (portfolioList) => {
+    return portfolioList.filter((k) => {
+      return k.wt > 0.005;
+    });
+  };
 
   componentWillReceiveProps(nextProps) {
     const { sortBy, sortDirection } = this.state;
@@ -39,7 +45,7 @@ class PortfolioOverview extends Component {
           sortedList: this._sortList({
             sortBy,
             sortDirection,
-            portfolio: nextProps.portfolio,
+            portfolio: this.filterLaggards(nextProps.portfolio),
           }),
         },
         () => this._windowScroller && this._windowScroller.updatePosition()
@@ -55,7 +61,7 @@ class PortfolioOverview extends Component {
     const sortedList = this._sortList({
       sortBy,
       sortDirection,
-      portfolio: this.props.portfolio,
+      portfolio: this.state.sortedList,
     });
     this.setState({ sortBy, sortDirection, sortedList });
   };
@@ -111,10 +117,17 @@ class PortfolioOverview extends Component {
                         sortDirection={this.state.sortDirection}
                         rowGetter={({ index }) => sortedList[index]}
                       >
-                        <Column label="Stock" dataKey="stock" width={300} />
+                        <Column label="Stock" dataKey="stock" width={400} />
                         {/* <Column label="Sector" dataKey="sector" width={200} /> */}
                         {/* <Column label="value(Cr)" dataKey="value" width={100} /> */}
-                        <Column label="weight" dataKey="wt" width={200} />
+                        <Column
+                          label="weight"
+                          dataKey="wt"
+                          width={200}
+                          cellRenderer={(data) => {
+                            return (data.cellData * 100).toFixed(2) + " %";
+                          }}
+                        />
                         {/* <Column
                           label="Quantity"
                           dataKey="quantity"

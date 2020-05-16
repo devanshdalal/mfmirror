@@ -77,7 +77,10 @@ class FundsForm extends Component {
             // key={`weight${data}` + this.state.form[`weight${data}`]}
             name={`weight${data}`}
             id="weight"
-            placeholder="Weight"
+            placeholder="wt > 0"
+            min={0.001}
+            step={0}
+            required
             onChange={this.onChange}
             value={this.state.form[`weight${data}`]}
           />
@@ -171,6 +174,7 @@ class FundsForm extends Component {
             <Form
               onSubmit={(e) => {
                 e.preventDefault();
+                this.handleSubmitBtn();
               }}
             >
               <Table borderless className="FundsForm__table">
@@ -184,22 +188,13 @@ class FundsForm extends Component {
                 </thead>
                 <tbody>{this.renderRows()}</tbody>
               </Table>
-              <div className="FundsForm__formControl">
-                <div className="FundsForm__addRow">
-                  <Button color="secondary" onClick={this.addRowToForm}>
-                    Add row
-                  </Button>
-                </div>
-
-                <div className="FundsForm__submit">
-                  <Button
-                    color="success"
-                    // type="submit"
-                    onClick={this.handleSubmitBtn}
-                  >
-                    Submit →
-                  </Button>
-                </div>
+              <div className="FundsForm_FormControl">
+                <Button color="secondary" onClick={this.addRowToForm}>
+                  +
+                </Button>
+                <Button color="success" type="submit">
+                  Submit →
+                </Button>
               </div>
             </Form>
           </div>

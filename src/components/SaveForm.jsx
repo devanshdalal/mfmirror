@@ -1,5 +1,12 @@
 import React from "react";
-import { Button, Form, FormGroup, Label, Input, FormText } from "reactstrap";
+import {
+  Button,
+  Form,
+  InputGroup,
+  Label,
+  Input,
+  InputGroupAddon,
+} from "reactstrap";
 
 class SaveForm extends React.Component {
   constructor(props) {
@@ -21,18 +28,21 @@ class SaveForm extends React.Component {
   render() {
     return (
       <Form>
-        <FormGroup>
-          <Label for="name">Name</Label>
+        <InputGroup className="SaveForm">
           <Input
             type="text"
             name="Name"
             id="basketName"
             value={this.state.value}
             onChange={this.handleChange}
-            placeholder="with a placeholder"
+            placeholder="basket name"
           />
-        </FormGroup>
-        <Button onClick={this.handleSubmit}>Submit</Button>
+          <InputGroupAddon addonType="append">
+            <Button onClick={this.handleSubmit} color="primary">
+              Submit
+            </Button>
+          </InputGroupAddon>
+        </InputGroup>
       </Form>
     );
   }
