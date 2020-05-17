@@ -25,7 +25,7 @@ class FundsForm extends Component {
       serverData: [],
       loading: false,
       suggestionBoxData: [],
-      formIndex: [1, 2],
+      formIndex: [1],
       randomStringValue: getRandomString(),
     };
     this.props.updateLoading();
@@ -38,8 +38,7 @@ class FundsForm extends Component {
     const { currentBasket, funds } = this.props;
     if (prevProps.currentBasket !== currentBasket) {
       if (currentBasket) {
-        const { form, schemes } = this.backConvertStateData(currentBasket);
-        this.handleChangeBasket(schemes, form);
+        this.handleBasketToFormData(currentBasket);
       }
     }
     if (!isEqual(prevProps.funds, funds)) {
@@ -56,7 +55,7 @@ class FundsForm extends Component {
     return formIndex.map((data, index) => (
       <tr key={index + randomStringValue}>
         <th scope="row">{index + 1}</th>
-        <td>
+        <td className="WideTD">
           <SuggestionBox
             // key={`fundName${data}` + this.state.form[`fundName${data}`]}
             inputProps={{
@@ -85,6 +84,18 @@ class FundsForm extends Component {
             value={this.state.form[`weight${data}`]}
           />
         </td>
+        <td>
+          {index > 0 && (
+            <Button
+              type="button"
+              onClick={() => {
+                this.deleteRowFromForm(data);
+              }}
+            >
+              x
+            </Button>
+          )}
+        </td>
       </tr>
     ));
   };
@@ -95,7 +106,7 @@ class FundsForm extends Component {
     });
   };
 
-  backConvertStateData = (basketName) => {
+  handleBasketToFormData = (basketName) => {
     const { baskets } = this.props;
     const schemes = get(baskets[basketName], "schemes");
     const form = {};
@@ -103,38 +114,6 @@ class FundsForm extends Component {
       form[`fundName${index + 1}`] = value["name"];
       form[`weight${index + 1}`] = value["wt"].toString();
     });
-    return { form, schemes };
-  };
-
-  convertStateData = (formData) => {
-    const covertedData = [];
-    Object.keys(formData).forEach((key) => {
-      if (key.indexOf("fundName") !== -1) {
-        let inputKey = key.replace("fundName", "");
-        let weightKey = `weight${inputKey}`;
-        covertedData.push({
-          name: formData[key],
-          wt: formData[weightKey] ? parseFloat(formData[weightKey]) : 0.0,
-        });
-      }
-    });
-    return covertedData;
-  };
-
-  handleSubmitBtn = () => {
-    this.setState({ loading: true });
-    console.log("this.state.form", this.state.form);
-
-    const basket = this.convertStateData(this.state.form);
-    const basketPortfolio = getBasketPortfolio(basket, this.props.funds);
-    this.setState({
-      serverData: basketPortfolio,
-      loading: false,
-      basket,
-    });
-  };
-
-  handleChangeBasket = (schemes, form) => {
     const basketPortfolio = getBasketPortfolio(schemes, this.props.funds);
     const newIdexArr = [];
     Object.keys(form).forEach((key) => {
@@ -151,18 +130,58 @@ class FundsForm extends Component {
     });
   };
 
+  convertStateData = (formIndex, formData) => {
+    const covertedData = [];
+    formIndex.forEach((key) => {
+      const fundKey = `fundName${key}`;
+      const weightKey = `weight${key}`;
+      covertedData.push({
+        name: formData[fundKey],
+        wt: formData[weightKey] ? parseFloat(formData[weightKey]) : 0.0,
+      });
+    });
+    return covertedData;
+  };
+
+  handleSubmitBtn = () => {
+    this.setState({ loading: true });
+
+    const basket = this.convertStateData(this.state.formIndex, this.state.form);
+    const basketPortfolio = getBasketPortfolio(basket, this.props.funds);
+    this.setState({
+      serverData: basketPortfolio,
+      loading: false,
+    });
+  };
+
+  handleChangeBasket = (schemes, form) => {};
+
   addRowToForm = () => {
     const { formIndex } = this.state;
-    const newIndex = formIndex[formIndex.length - 1] + 1;
+    const newIndex =
+      formIndex.reduce((k1, k2) => {
+        return Math.max(k1, k2);
+      }) + 1;
     this.setState({
       formIndex: [...this.state.formIndex, newIndex],
       randomStringValue: getRandomString(),
     });
   };
 
+  deleteRowFromForm = (rowId) => {
+    const { formIndex } = this.state;
+    this.setState({
+      formIndex: formIndex.filter((item) => {
+        return item != rowId;
+      }),
+      randomStringValue: getRandomString(),
+    });
+  };
+
   saveHandler = (name) => {
     // const { basketsToName} = this.props
-    const { basket } = this.state;
+    const basket = this.convertStateData(this.state.formIndex, this.state.form);
+    console.log("putBasket", this.state);
     this.props.putBasket({ name, schemes: basket, permanent: false });
   };
 
@@ -184,6 +203,7 @@ class FundsForm extends Component {
                     <th>Fund</th>
                     {/* <th>Percentage</th> */}
                     <th>Weight</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>{this.renderRows()}</tbody>
@@ -208,7 +228,10 @@ class FundsForm extends Component {
         )}
         {this.state.serverData.length ? (
           <div>
-            <SaveForm saveHandler={this.saveHandler} />
+            <SaveForm
+              saveHandler={this.saveHandler}
+              key={this.props.currentBasket}
+            />
             <PortfolioOverview
               portfolio={[...this.state.serverData]}
               rowsPrinted={this.state.randomStringValue}

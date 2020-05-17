@@ -11,13 +11,15 @@ import {
 class SaveForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { name: "" };
+    this.state = { name: "", disabled: true };
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleChange(event) {
-    this.setState({ name: event.target.value });
+    if (event.target.value) {
+      this.setState({ disabled: false, name: event.target.value });
+    }
   }
 
   handleSubmit(event) {
@@ -33,13 +35,17 @@ class SaveForm extends React.Component {
             type="text"
             name="Name"
             id="basketName"
-            value={this.state.value}
+            value={this.state.name}
             onChange={this.handleChange}
             placeholder="basket name"
           />
           <InputGroupAddon addonType="append">
-            <Button onClick={this.handleSubmit} color="primary">
-              Submit
+            <Button
+              onClick={this.handleSubmit}
+              disabled={this.state.disabled}
+              color="primary"
+            >
+              Save
             </Button>
           </InputGroupAddon>
         </InputGroup>

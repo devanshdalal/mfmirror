@@ -42,6 +42,7 @@ const loadingReducer = (state = initialState, action) => {
     }
     case GET_BASKETS_SUCCESS: {
       const baskets = makeNamedState(action.payload);
+      localStorage.setItem("areBasketsStale", "false");
       return {
         ...state,
         baskets,
@@ -62,6 +63,7 @@ const loadingReducer = (state = initialState, action) => {
     }
     case DELETE_BASKET_SUCCESS: {
       const { schemes } = state.baskets[action.payload];
+      localStorage.setItem("areBasketsStale", "true");
       const key = JSON.stringify(schemes);
       return Object.assign({}, state, {
         baskets: omit(state.baskets, action.payload),

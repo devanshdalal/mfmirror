@@ -11,6 +11,7 @@ class Footer extends React.Component {
     return (
       <div className="Footer">
         {Object.keys(baskets).map((name) => {
+          const permanent = get(baskets[name], "permanent");
           return (
             <Card key={name} className="Footer_Card">
               <div
@@ -19,7 +20,9 @@ class Footer extends React.Component {
               >
                 {name}
               </div>
-              <Button close onClick={() => this.props.deleteBasket(name)} />
+              {!permanent && (
+                <Button close onClick={() => this.props.deleteBasket(name)} />
+              )}
             </Card>
           );
         })}

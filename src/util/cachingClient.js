@@ -7,12 +7,12 @@ AWS.config.update({
   secretAccessKey: process.env.REACT_APP_SECRETACCESSKEY,
 });
 
-const LSCACHE_TIMEOUT = 10;
+const LSCACHE_TIMEOUT = 1; // minutes
 
 let dynamoClient = new AWS.DynamoDB.DocumentClient();
 
 const dbClient = async (options) => {
-  console.log("dbClient.options", options);
+  // console.log("dbClient.options", options);
   const { table, cache, method } = options;
   let params = {
     TableName: table,
@@ -58,7 +58,6 @@ const dbClient = async (options) => {
           console.log(err, err.stack);
           return reject(err);
         } else {
-          console.log("data--", data);
           return resolve(data);
         }
       });

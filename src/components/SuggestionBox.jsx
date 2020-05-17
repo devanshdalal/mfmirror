@@ -131,6 +131,10 @@ class SuggestionBox extends React.Component {
 
   onBlur = (event) => {
     const { onBlur } = this.props.inputProps;
+    // if (!this.state.list.includes(this.state.searchString)) {
+    //   this.setState({ searchString: "" });
+    //   this.props.setValue && this.props.setValue({ target: { value: "" } });
+    // }
     this.setState({ showList: false });
     onBlur && onBlur(event);
   };

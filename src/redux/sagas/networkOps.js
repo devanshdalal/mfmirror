@@ -33,10 +33,12 @@ export function* GetFundsOp() {
 
 export function* GetBasketsOp() {
   // GET_BASKETS
+  const areBasketsStale = localStorage.getItem("areBasketsStale");
+
   const options = {
     method: "SCAN",
     table: "baskets",
-    cache: true,
+    cache: areBasketsStale ? false : true,
   };
   const res = yield call(dbClient, options);
   yield put({
@@ -58,7 +60,7 @@ export function* PutBasketOp(action) {
 
   const basketsToName = yield select(getBasketsToName);
   const key = JSON.stringify(schemes);
-  console.log("key", key, "basketsToName", basketsToName, "schemes", schemes);
+  // console.log("key", key, "basketsToName", basketsToName, "schemes", schemes);
   let options = {
     table: "baskets",
     item: action.payload,
@@ -91,7 +93,6 @@ export function* DeleteBasketOp(action) {
   // DELETE_BASKET
   const name = action.payload;
   const baskets = yield select(getBaskets); // <-- get the baskets
-  console.log("delete baskets", baskets, name, name in baskets);
   assert(name in baskets);
   if (baskets[name].permanent) {
     return;
@@ -105,7 +106,6 @@ export function* DeleteBasketOp(action) {
     name: action.payload,
   };
   const res = yield call(dbClient, options);
-  console.log("res111", res);
   yield put({
     type: DELETE_BASKET_SUCCESS,
     payload: action.payload,
