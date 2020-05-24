@@ -17,14 +17,17 @@ class SaveForm extends React.Component {
   }
 
   handleChange(event) {
-    if (event.target.value) {
-      this.setState({ disabled: false, name: event.target.value });
-    }
+    this.setState({
+      disabled: event.target.value ? false : true,
+      name: event.target.value,
+    });
   }
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.saveHandler(this.state.name);
+    if (this.state.name) {
+      this.props.saveHandler(this.state.name);
+    }
   }
 
   render() {
