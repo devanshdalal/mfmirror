@@ -1,10 +1,16 @@
 import AWS from "aws-sdk";
 import lscache from "lscache";
+import AES from "crypto-js/aes";
+import UTF8 from 'crypto-js/enc-utf8'
+
+const region = process.env.REACT_APP_REGION;
+const accessKeyId = AES.decrypt(process.env.REACT_APP_ACCESSKEYID, process.env.REACT_APP_TOKEN).toString(UTF8);
+const secretAccessKey = AES.decrypt(process.env.REACT_APP_SECRETACCESSKEY, process.env.REACT_APP_TOKEN).toString(UTF8);
 
 AWS.config.update({
-  region: process.env.REACT_APP_REGION,
-  accessKeyId: process.env.REACT_APP_ACCESSKEYID,
-  secretAccessKey: process.env.REACT_APP_SECRETACCESSKEY,
+  region,
+  accessKeyId,
+  secretAccessKey
 });
 
 const LSCACHE_TIMEOUT = 1; // minutes
