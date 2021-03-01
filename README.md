@@ -1,5 +1,10 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## About
+A mutual fund portfolio investigation web app, serverless, powered by aws dynamodb.
+
+Related project: https://github.com/devanshdalal/mflambda
+
 ## Architecture Design
 
 ![alt text](/design.png "Design")
